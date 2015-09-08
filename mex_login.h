@@ -25,9 +25,9 @@ public:
     explicit MEX_Login(QWidget *parent = 0);
     ~MEX_Login();
 
-    void setUserID(QString);
+    void setUserID(QString); //inline
 
-    QString getUserID();
+    QString getUserID();    //inline
 
 private slots:
 

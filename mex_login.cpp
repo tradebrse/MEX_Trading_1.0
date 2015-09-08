@@ -26,11 +26,13 @@ MEX_Login::~MEX_Login()
 
 // Public member functions
 /*************************/
-void MEX_Login::setUserID(QString userID){
+inline void MEX_Login::setUserID(QString userID)
+{
     this->userID = userID;
 }
 
-QString MEX_Login::getUserID(){
+inline QString MEX_Login::getUserID()
+{
     return this->userID;
 }
 
@@ -144,7 +146,7 @@ void MEX_Login::registerUser()
 }
 
 
-QSqlQuery MEX_Login::executeQuery (QString sqlCommand, bool &ok) {
+QSqlQuery MEX_Login::executeQuery (const QString sqlCommand, bool &ok) {
 
 
     if (!db.open())
@@ -162,17 +164,13 @@ QSqlQuery MEX_Login::executeQuery (QString sqlCommand, bool &ok) {
         ok = query.exec(sqlCommand);
         return query;
     }
-
 }
 
 void MEX_Login::refreshList()
 {
     bool ok;
-
     QString sqlCommand = "SELECT user FROM userList";
-
     QSqlQuery query = executeQuery(sqlCommand, ok);
-
     if (ok)
     {
         this->userList.clear();
@@ -183,7 +181,7 @@ void MEX_Login::refreshList()
             ok = query.next();									//next line
         } //while ok
     } else
-    { //Fehler beim Ausführen des SQL-Statements
+    { //Error while executing SQL-Statement
         QMessageBox messageBox;
         messageBox.critical(0,"Error","Database not found.");
         messageBox.show();
@@ -195,7 +193,6 @@ void MEX_Login::refreshList()
 QString MEX_Login::encrypt(QString clearPass)
 {
     QByteArray result = hash->hash(clearPass.toUtf8(),QCryptographicHash::Md5);
-
     return result.toHex();
 }
 

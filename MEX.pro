@@ -22,12 +22,14 @@ SOURCES += main.cpp\
         mex_login.cpp \
     mex_main.cpp \
     mex_userpanel.cpp \
-    mex_myaccount.cpp
+    mex_myaccount.cpp \
+    mex_trader.cpp
 
 HEADERS  += mex_login.h \
     mex_main.h \
     mex_userpanel.h \
-    mex_myaccount.h
+    mex_myaccount.h \
+    mex_trader.h
 
 FORMS    += mex_login.ui \
     mex_main.ui \
