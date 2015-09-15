@@ -9,7 +9,7 @@ MEX_Login::MEX_Login(QWidget *parent) :
     ui(new Ui::MEX_Login)
 {
     ui->setupUi(this);
-
+    this->setFixedSize(this->size()); //Set fixed window size
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
@@ -46,11 +46,11 @@ void MEX_Login::on_btnLogIn_clicked()
 void MEX_Login::on_btnSignUp_clicked()
 {
     registerUser();
-
 }
 
 void MEX_Login::logInUser()
 {
+    ui->lblLogInOutput->clear();
     QString username;
     QString userpass;
     username = ui->edtLogInUser->text();
@@ -96,12 +96,14 @@ void MEX_Login::logInUser()
     } else
     {
         ui->lblLogInOutput->setText("Wrong username or password.");
+        ui->edtLogInPW->clear();
     }
 
 }
 
 void MEX_Login::registerUser()
 {
+    ui->lblSignOutput->clear();
     QString username;
     QString userpass;
     username = ui->edtSignUser->text();
@@ -146,14 +148,15 @@ void MEX_Login::registerUser()
 }
 
 
-QSqlQuery MEX_Login::executeQuery (const QString sqlCommand, bool &ok) {
-
-
+QSqlQuery MEX_Login::executeQuery (const QString sqlCommand, bool &ok)
+{
     if (!db.open())
     {
         QMessageBox messageBox;
         messageBox.critical(0,"Error","No database connection.");
         messageBox.show();
+        QSqlQuery emptyQuery;
+        return emptyQuery;
     } else
     {
         //--------------------------------------//

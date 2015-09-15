@@ -7,20 +7,29 @@
     <x>0</x>
     <y>0</y>
     <width>285</width>
-    <height>252</height>
+    <height>313</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>My Account</string>
   </property>
   <widget class="QLineEdit" name="edtNewPassword_2">
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>180</y>
+     <y>220</y>
      <width>131</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="lblMailOutput">
@@ -46,7 +55,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>E-Mai:</string>
+    <string>E-Mail:</string>
    </property>
   </widget>
   <widget class="QLabel" name="lblUserOutput">
@@ -66,7 +75,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>150</y>
+     <y>190</y>
      <width>91</width>
      <height>16</height>
     </rect>
@@ -79,7 +88,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>180</y>
+     <y>220</y>
      <width>121</width>
      <height>16</height>
     </rect>
@@ -105,17 +114,20 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>150</y>
+     <y>190</y>
      <width>131</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="lblCurrentPassword">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>120</y>
+     <y>160</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -128,10 +140,13 @@
    <property name="geometry">
     <rect>
      <x>140</x>
-     <y>120</y>
+     <y>160</y>
      <width>131</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QLabel" name="lblUser">
@@ -151,7 +166,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>210</y>
+     <y>250</y>
      <width>251</width>
      <height>23</height>
     </rect>
@@ -164,7 +179,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>130</y>
      <width>291</width>
      <height>16</height>
     </rect>
@@ -190,7 +205,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>240</y>
+     <y>280</y>
      <width>251</width>
      <height>16</height>
     </rect>
@@ -199,7 +214,39 @@
     <string/>
    </property>
   </widget>
+  <widget class="QLabel" name="lblStatus">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>41</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Status:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblUsertypeOutput">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>100</y>
+     <width>211</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>edtCurrentPassword</tabstop>
+  <tabstop>edtNewPassword</tabstop>
+  <tabstop>edtNewPassword_2</tabstop>
+  <tabstop>btnChangePW</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

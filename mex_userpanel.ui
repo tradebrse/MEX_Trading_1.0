@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>195</height>
+    <height>206</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>User Panel</string>
   </property>
   <widget class="QPushButton" name="btnShowPW">
    <property name="enabled">
@@ -98,6 +98,19 @@
      <width>271</width>
      <height>101</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblOutput">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>180</y>
+     <width>311</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
