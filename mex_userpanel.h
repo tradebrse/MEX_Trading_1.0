@@ -5,6 +5,7 @@
 #include <mex_main.h>
 #include <QWidget>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 //---------------//
 //      SQL      //
@@ -21,7 +22,7 @@ class MEX_UserPanel : public QWidget
 
 public:
     // Constructor/Deconstructor
-    explicit MEX_UserPanel(QWidget *parent = 0);
+    explicit MEX_UserPanel(QWidget *parent = 0); //QWidget *parent = 0
     ~MEX_UserPanel();
 
     void setUserID(QString);
@@ -34,7 +35,11 @@ private slots:
 
     void showUserPW();
 
+    void changePassword();
+
     void refreshList();
+
+    QString encrypt(QString);
 
     QSqlQuery executeQuery(QString, bool&);
 
@@ -45,6 +50,8 @@ private slots:
     void on_btnShowPW_clicked();
 
     void on_btnDeleteUser_clicked();
+
+    void on_btnChangePW_clicked();
 
 private:
     Ui::MEX_UserPanel *ui;
@@ -66,6 +73,8 @@ private:
     //---------//
 
     QString userID;
+
+    QCryptographicHash* hash;
 };
 
 #endif // MEX_USERPANEL_H

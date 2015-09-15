@@ -8,9 +8,9 @@ MEX_UserPanel::MEX_UserPanel(QWidget *parent) :
     ui(new Ui::MEX_UserPanel)
 {
     ui->setupUi(this);
-
+    this->setFixedSize(this->size()); //Set fixed window size
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE", "userpanel_connection"); //"userpanel_connection"
     db.setDatabaseName(dbPath);
 }
 
@@ -18,6 +18,7 @@ MEX_UserPanel::MEX_UserPanel(QWidget *parent) :
 
 MEX_UserPanel::~MEX_UserPanel()
 {
+    closeDB();
     delete ui;
 }
 
@@ -45,6 +46,12 @@ void MEX_UserPanel::on_btnShowUsers_clicked()
     showUsers();
 }
 
+void MEX_UserPanel::on_btnChangePW_clicked()
+{
+    changePassword();
+}
+
+
 void MEX_UserPanel::deleteUser()
 {
     if(ui->lwUsers->selectedItems().count()==0)
@@ -71,7 +78,8 @@ void MEX_UserPanel::deleteUser()
 
             QString sqlCommand = "SELECT usertype FROM userList WHERE user = '" + user + "' ";
 
-            QSqlQuery query  = executeQuery(sqlCommand, ok);
+            QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
+            query = executeQuery(sqlCommand, ok);
 
             if (ok)
             {
@@ -119,13 +127,10 @@ void MEX_UserPanel::showUserPW(){
     } else
     {
         QString user = ui->lwUsers->selectedItems().first()->text();
-
         bool ok;
-
         QString sqlCommand = "SELECT pass FROM userList WHERE user = '" + user + "' ";
-
-        QSqlQuery query  = executeQuery(sqlCommand, ok);
-
+        QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
+        query = executeQuery(sqlCommand, ok);
         if (ok)
         {
             query.first();
@@ -139,10 +144,50 @@ void MEX_UserPanel::showUserPW(){
             messageBox.critical(0,"Error","Database not found.");
             messageBox.show();
         }
-
-
     }
 }
+
+
+void MEX_UserPanel::changePassword() {
+    ui->lblOutput->clear();
+    if(ui->lwUsers->selectedItems().count() == 0)
+    {
+        QMessageBox messageBox;
+        messageBox.information(0,"","No User selected.");
+        messageBox.show();
+    } else
+    {
+        QString username = ui->lwUsers->selectedItems().first()->text();
+        QString userpass = ui->edtNewPW->text();
+        if(!userpass.contains(" "))
+        {
+            if (userpass.length() > 4)
+            {
+                QString cryptpass = encrypt(userpass);
+                bool ok;
+                QString sqlCommand = "UPDATE userList SET pass = '" + cryptpass + "' WHERE user = '" + username + "' ";
+                QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
+                query = executeQuery(sqlCommand, ok);
+                if (ok)
+                {
+                    ui->edtNewPW->clear();
+                    ui->lblOutput->setText("Password has been changed.");
+                } else
+                {
+                    ui->lblOutput->setText("Password could not be changed.");
+                }
+            }
+            else
+            {
+                ui->lblOutput->setText("Password must be minimum 5 characters.");
+            }
+        } else
+        {
+            ui->lblOutput->setText("Spaces are not allowed.");
+        }
+    }
+}
+
 
 void MEX_UserPanel::showUsers()
 {
@@ -160,11 +205,9 @@ void MEX_UserPanel::showUsers()
 void MEX_UserPanel::refreshList()
 {
     bool ok;
-
     QString sqlCommand = "SELECT user FROM userList";
-
-    QSqlQuery query = executeQuery(sqlCommand, ok);
-
+    QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
+    query = executeQuery(sqlCommand, ok);
     if (ok)
     {
         this->userList.clear();
@@ -188,19 +231,15 @@ QSqlQuery MEX_UserPanel::executeQuery (QString sqlCommand, bool &ok)
     if (!db.open())
     {
         ///db.lastError().text()
-    } else {
-
-        //--------------------------------------//
-        // Bei mehr als einer DB spezifizieren, //
-        // für welche der Query gelten soll.    //
-        //--------------------------------------//
-
-        QSqlQuery query;
-
+        QSqlQuery emptyQuery;
+        return emptyQuery;
+    } else
+    {
+        QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
+        //QSqlQuery query
         ok = query.exec(sqlCommand);
         return query;
     }
-
 }
 
 void MEX_UserPanel::closeDB()
@@ -211,4 +250,11 @@ void MEX_UserPanel::closeDB()
     db = QSqlDatabase();
     db.removeDatabase(connection);
 }
+
+QString MEX_UserPanel::encrypt(QString clearPass)
+{
+    QByteArray result = hash->hash(clearPass.toUtf8(),QCryptographicHash::Md5);
+    return result.toHex();
+}
+
 

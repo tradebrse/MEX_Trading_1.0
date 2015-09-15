@@ -46,6 +46,8 @@ private slots:
 
     void closeDB();
 
+    void enableWindow();
+
     QSqlQuery executeQuery(QString, bool&);
 
 private:
@@ -62,6 +64,9 @@ private:
     //---------//
 
     QString userID;
+
+protected:
+    //void closeEvent(QCloseEvent*);
 };
 
 #endif // MEX_MAIN_H

@@ -8,7 +8,9 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     ui(new Ui::MEX_Main)
 {
     ui->setupUi(this);
-
+    this->setFixedSize(this->size()); //Set fixed window size
+    this->setAttribute(Qt::WA_DeleteOnClose);
+    setUserID(userID);
     //Setup DB
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
     db = QSqlDatabase::addDatabase("QSQLITE");
@@ -78,10 +80,13 @@ void MEX_Main::on_actionUser_Panel_triggered()
 
 void MEX_Main::openUserPanel()
 {
-    MEX_UserPanel *userPanelWidget = new MEX_UserPanel;
+    MEX_UserPanel *userPanelWidget = new MEX_UserPanel(); //this
+    userPanelWidget->setAttribute(Qt::WA_DeleteOnClose);
+    connect( userPanelWidget, SIGNAL(destroyed()), this, SLOT(enableWindow()));
+    connect( this, SIGNAL(destroyed()), userPanelWidget, SLOT(close()));
     userPanelWidget->show();
+    this->setDisabled(true);
     userPanelWidget->setUserID(this->userID);
-
 }
 
 void MEX_Main::on_actionMy_Account_triggered()
@@ -91,16 +96,30 @@ void MEX_Main::on_actionMy_Account_triggered()
 
 void MEX_Main::openMyAccount()
 {
-    MEX_MyAccount *myAccount = new MEX_MyAccount;
+    MEX_MyAccount *myAccount = new MEX_MyAccount(userID);
+    myAccount->setAttribute(Qt::WA_DeleteOnClose);
+    connect( myAccount, SIGNAL(destroyed()), this, SLOT(enableWindow()));
+    connect( this, SIGNAL(destroyed()), myAccount, SLOT(close()));
     myAccount->show();
-    myAccount->setUserID(this->userID);
+    this->setDisabled(true);
 }
 
+void MEX_Main::enableWindow()
+{
+    this->setEnabled(true);
+}
+
+/*void MEX_Main::closeEvent(QCloseEvent*)
+{
+}
+*/
 QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
 {
     if (!db.open())
     {
         ///db.lastError().text()
+       QSqlQuery emptyQuery;
+       return emptyQuery;
     } else
     {
         //--------------------------------------//
@@ -111,7 +130,6 @@ QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
         ok = query.exec(sqlCommand);
         return query;
     }
-
 }
 
 void MEX_Main::closeDB()
