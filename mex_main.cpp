@@ -18,8 +18,7 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
 
     //generate Products
     readProductDB();
-    //generateProducts();
-    //fillCBoxes();
+    generateProducts(productSymbolList, productNameList);
 
     //Check usertype to activate admin mode
     bool ok;
@@ -155,11 +154,39 @@ void MEX_Main::generateProducts()
     productList.append(BAYN.getName());
 }
 
-void MEX_Main::fillCBoxes()
-{
-    ui->cBoxProductShow->addItems();
-}
 */
 
-void MEX_Main::readProductDB(){
+void MEX_Main::readProductDB()
+{
+    bool ok;
+    QString sqlCommand = "SELECT symbol, name FROM productList";
+    QSqlQuery query  = executeQuery(sqlCommand, ok);
+
+    if (ok)
+    {
+        ok = query.first();								//go to first line
+        while (ok) {
+            productSymbolList.append(query.value(0).toString());	//fill QStringList
+            productNameList.append(query.value(1).toString());	//fill QStringList
+            ok = query.next();									//get next line
+        } //while there are next lines
+    } else
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0,"Error","Database not found.");
+        ui->actionUser_Panel->setVisible(false);
+        messageBox.show();
+    }
+    ui->cBoxProductShow->addItems(productNameList);
+    ui->cBoxProductExec->addItems(productNameList);
+}
+
+void MEX_Main::generateProducts(QStringList symbol, QStringList name){
+    qDebug() << "Test";
+    for (int i = 0; i < productList.size() ; i++){
+        productList.append(new MEX_Product(symbol.value(i), name.value(i)));
+    }
+    for (int i = 0; i < productList.size() ; i++){
+        qDebug() << productList.value(i)->getName();
+    }
 }

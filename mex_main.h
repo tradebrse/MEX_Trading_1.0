@@ -51,9 +51,9 @@ private slots:
 
     QSqlQuery executeQuery(QString, bool&);
 
-    //void generateProducts();
+    void readProductDB();
 
-    //void fillCBoxes();
+    void generateProducts(QStringList, QStringList);
 
 private:
     Ui::MEX_Main *ui;
@@ -70,8 +70,14 @@ private:
 
     QString userID;
 
+    QStringList productNameList;
+
+    QStringList productSymbolList;
+
+    QList<MEX_Product*> productList;
+
 protected:
-    //void closeEvent(QCloseEvent*);
+
 };
 
 #endif // MEX_MAIN_H
