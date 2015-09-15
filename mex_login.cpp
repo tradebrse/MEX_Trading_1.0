@@ -1,6 +1,6 @@
 #include "mex_login.h"
 #include "ui_mex_login.h"
-
+#include <mex_trader.h>
 
 // Constructor
 
