@@ -2,7 +2,7 @@
 
 MEX_Product::MEX_Product(QString name)
 {
-
+    this->name=name;
 }
 
 MEX_Product::~MEX_Product()

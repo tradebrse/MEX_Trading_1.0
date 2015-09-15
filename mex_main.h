@@ -4,6 +4,7 @@
 #include <mex_login.h>
 #include <mex_userpanel.h>
 #include <mex_myaccount.h>
+#include <mex_product.h>
 #include <QMainWindow>
 #include <QDebug>
 
@@ -49,6 +50,10 @@ private slots:
     void enableWindow();
 
     QSqlQuery executeQuery(QString, bool&);
+
+    //void generateProducts();
+
+    //void fillCBoxes();
 
 private:
     Ui::MEX_Main *ui;

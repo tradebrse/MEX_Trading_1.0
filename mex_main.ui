@@ -14,10 +14,10 @@
    <string>MEX</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="edt_value_4">
+   <widget class="QLineEdit" name="edtValue">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>240</x>
       <y>530</y>
       <width>113</width>
       <height>20</height>
@@ -62,8 +62,11 @@
       <string>Ask</string>
      </property>
     </widget>
+    <zorder>radioButton_7</zorder>
+    <zorder>radioButton_8</zorder>
+    <zorder>lblInfoOutput</zorder>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="lblTradingGUI">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -81,10 +84,10 @@
      <string>Trading GUI</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_quantity_4">
+   <widget class="QLabel" name="lblQuantity">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>390</x>
       <y>510</y>
       <width>71</width>
       <height>16</height>
@@ -94,30 +97,20 @@
      <string>Quantity</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="edt_quantity_4">
+   <widget class="QLineEdit" name="edtQuantity">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>390</x>
       <y>530</y>
       <width>113</width>
       <height>20</height>
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="edt_Product_7">
+   <widget class="QLabel" name="lblValue">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>530</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_value_4">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
+      <x>240</x>
       <y>510</y>
       <width>71</width>
       <height>16</height>
@@ -127,10 +120,10 @@
      <string>Value</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_execute_4">
+   <widget class="QPushButton" name="btnExecute">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>510</x>
       <y>530</y>
       <width>75</width>
       <height>23</height>
@@ -140,10 +133,10 @@
      <string>Execute</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_info_4">
+   <widget class="QLabel" name="lblInfoOutput">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>570</y>
       <width>731</width>
       <height>71</height>
@@ -158,7 +151,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_productType_8">
+   <widget class="QLabel" name="lblProductExec">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -168,10 +161,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Product Type</string>
+     <string>Product</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidget_4">
+   <widget class="QTableWidget" name="tableWidgetOrderbook">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -211,20 +204,7 @@
      </property>
     </column>
    </widget>
-   <widget class="QLabel" name="lbl_product_7">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>510</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Product</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cBox_productType_7">
+   <widget class="QComboBox" name="cBoxProductExec">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -233,21 +213,11 @@
       <height>22</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Futures</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Options</string>
-     </property>
-    </item>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="btnShow">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>240</x>
       <y>100</y>
       <width>75</width>
       <height>23</height>
@@ -257,7 +227,7 @@
      <string>Show</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lbl_productType_7">
+   <widget class="QLabel" name="lblProductShow">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -267,23 +237,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Product Type</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="lbl_product_8">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>80</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
      <string>Product</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="cBox_productType_8">
+   <widget class="QComboBox" name="cBoxProductShow">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -292,16 +249,6 @@
       <height>22</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Futures</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Options</string>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="btnLogOut">
     <property name="geometry">
@@ -316,15 +263,44 @@
      <string>Log out</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="edt_Product_8">
+   <widget class="QGroupBox" name="groupBox_5">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>100</y>
-      <width>113</width>
-      <height>20</height>
+      <x>150</x>
+      <y>80</y>
+      <width>81</width>
+      <height>61</height>
      </rect>
     </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QRadioButton" name="radioButton_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>All</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_10">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Mine</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

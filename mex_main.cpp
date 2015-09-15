@@ -16,6 +16,11 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
 
+    //generate Products
+    readProductDB();
+    //generateProducts();
+    //fillCBoxes();
+
     //Check usertype to activate admin mode
     bool ok;
     QString sqlCommand = "SELECT usertype FROM userList WHERE id = '" + userID + "' ";
@@ -109,10 +114,6 @@ void MEX_Main::enableWindow()
     this->setEnabled(true);
 }
 
-/*void MEX_Main::closeEvent(QCloseEvent*)
-{
-}
-*/
 QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
 {
     if (!db.open())
@@ -140,4 +141,25 @@ void MEX_Main::closeDB()
     db = QSqlDatabase();
     db.removeDatabase(connection);
 }
+ /*
+void MEX_Main::generateProducts()
+{
+   MEX_Product BAYN = new MEX_Product("Bayer AG");
+    MEX_Product DPW = new MEX_Product("Deutsche Post AG");
+    MEX_Product EOAN = new MEX_Product("E.ON SE");
+    MEX_Product LIN = new MEX_Product("Linde AG");
+    MEX_Product VOW3 = new MEX_Product("Volkswagen AG");
+    new MEX_Product("Test");
 
+    QStringList productList;
+    productList.append(BAYN.getName());
+}
+
+void MEX_Main::fillCBoxes()
+{
+    ui->cBoxProductShow->addItems();
+}
+*/
+
+void MEX_Main::readProductDB(){
+}
