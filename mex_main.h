@@ -74,7 +74,7 @@ private:
 
     QStringList productSymbolList;
 
-    QList<MEX_Product*> productList;
+    QList<MEX_Product*> productList; //product*
 
 protected:
 

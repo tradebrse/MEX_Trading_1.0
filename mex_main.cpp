@@ -118,8 +118,8 @@ QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
     if (!db.open())
     {
         ///db.lastError().text()
-       QSqlQuery emptyQuery;
-       return emptyQuery;
+        QSqlQuery emptyQuery;
+        return emptyQuery;
     } else
     {
         //--------------------------------------//
@@ -140,7 +140,7 @@ void MEX_Main::closeDB()
     db = QSqlDatabase();
     db.removeDatabase(connection);
 }
- /*
+/*
 void MEX_Main::generateProducts()
 {
    MEX_Product BAYN = new MEX_Product("Bayer AG");
@@ -181,9 +181,9 @@ void MEX_Main::readProductDB()
     ui->cBoxProductExec->addItems(productNameList);
 }
 
-void MEX_Main::generateProducts(QStringList symbol, QStringList name){
-    qDebug() << "Test";
-    for (int i = 0; i < productList.size() ; i++){
+void MEX_Main::generateProducts(QStringList symbol, QStringList name)
+{
+    for (int i = 0; i < symbol.size() ; i++){
         productList.append(new MEX_Product(symbol.value(i), name.value(i)));
     }
     for (int i = 0; i < productList.size() ; i++){
