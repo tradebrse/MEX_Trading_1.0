@@ -58,7 +58,7 @@ void MEX_Login::logInUser()
     refreshList();
     if (this->userList.contains(username))
     {
-        bool ok;
+        bool ok = false;
         QString sqlCommand = "SELECT id,pass,usertype  FROM userList WHERE user = '" + username + "' ";
         QSqlQuery query = executeQuery(sqlCommand, ok);
         if (ok)
@@ -117,7 +117,7 @@ void MEX_Login::registerUser()
             if (username.length() > 4 && userpass.length() > 4)
             {
 
-                bool ok;
+                bool ok = false;
                 QString cryptPass = encrypt(userpass);
                 QString sqlCommand = "INSERT INTO userList (user, pass) VALUES ('" + username + "', '" + cryptPass + "') ";
                 executeQuery(sqlCommand, ok);
@@ -171,7 +171,7 @@ QSqlQuery MEX_Login::executeQuery (const QString sqlCommand, bool &ok)
 
 void MEX_Login::refreshList()
 {
-    bool ok;
+    bool ok = false;
     QString sqlCommand = "SELECT user FROM userList";
     QSqlQuery query = executeQuery(sqlCommand, ok);
     if (ok)

@@ -5,14 +5,12 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QMessageBox>
+#include <QDebug>
 
 //---------------//
 //      SQL      //
 //---------------//
 #include <QtSql>
-
-
-//MEX_Main * main;
 
 namespace Ui {
 class MEX_MyAccount;

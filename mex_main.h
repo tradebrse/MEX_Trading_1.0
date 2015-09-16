@@ -5,6 +5,7 @@
 #include <mex_userpanel.h>
 #include <mex_myaccount.h>
 #include <mex_product.h>
+#include <mex_trader.h>
 #include <QMainWindow>
 #include <QDebug>
 
@@ -55,6 +56,8 @@ private slots:
 
     void generateProducts(QStringList, QStringList);
 
+    void loadTrader();
+
 private:
     Ui::MEX_Main *ui;
 
@@ -75,6 +78,19 @@ private:
     QStringList productSymbolList;
 
     QList<MEX_Product*> productList; //product*
+
+    MEX_Trader trader;
+
+    QString traderID;
+
+    QString username;
+
+    QString password;
+
+    QString permission;
+
+    int credit;
+
 
 protected:
 

@@ -13,19 +13,26 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     setUserID(userID);
     //Setup DB
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE", "main_connection");
     db.setDatabaseName(dbPath);
+
+    //load Trader data from DB
+    loadTrader();
 
     //generate Products
     readProductDB();
     generateProducts(productSymbolList, productNameList);
 
     //Check usertype to activate admin mode
-    bool ok;
-    QString sqlCommand = "SELECT usertype FROM userList WHERE id = '" + userID + "' ";
-    QSqlQuery query  = executeQuery(sqlCommand, ok);
+    bool ok = false;
 
-    if (ok)
+    QString sqlCommand = "SELECT usertype FROM userList WHERE id = '" + userID + "' ";
+
+    QSqlQuery query(QSqlDatabase::database("main_connection"));
+
+    query  = executeQuery(sqlCommand, ok);
+
+    if ( ok )
     {
         query.first();
         if (query.record().value(0).toString() == "client")
@@ -39,17 +46,18 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     } else
     {
         QMessageBox messageBox;
+
         messageBox.critical(0,"Error","Database not found.");
         ui->actionUser_Panel->setVisible(false);
         messageBox.show();
     }
-    closeDB();
 }
 
 // Deconstructor
 
 MEX_Main::~MEX_Main()
 {
+    closeDB();
     delete ui;
 }
 
@@ -87,6 +95,7 @@ void MEX_Main::openUserPanel()
     MEX_UserPanel *userPanelWidget = new MEX_UserPanel(); //this
     userPanelWidget->setAttribute(Qt::WA_DeleteOnClose);
     connect( userPanelWidget, SIGNAL(destroyed()), this, SLOT(enableWindow()));
+    connect( userPanelWidget, SIGNAL(destroyed()), this, SLOT(loadTrader()));
     connect( this, SIGNAL(destroyed()), userPanelWidget, SLOT(close()));
     userPanelWidget->show();
     this->setDisabled(true);
@@ -103,6 +112,7 @@ void MEX_Main::openMyAccount()
     MEX_MyAccount *myAccount = new MEX_MyAccount(userID);
     myAccount->setAttribute(Qt::WA_DeleteOnClose);
     connect( myAccount, SIGNAL(destroyed()), this, SLOT(enableWindow()));
+    connect( myAccount, SIGNAL(destroyed()), this, SLOT(loadTrader()));
     connect( this, SIGNAL(destroyed()), myAccount, SLOT(close()));
     myAccount->show();
     this->setDisabled(true);
@@ -119,14 +129,11 @@ QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
     {
         ///db.lastError().text()
         QSqlQuery emptyQuery;
+
         return emptyQuery;
     } else
     {
-        //--------------------------------------//
-        // Bei mehr als einer DB spezifizieren, //
-        // für welche der Query gelten soll.    //
-        //--------------------------------------//
-        QSqlQuery query;
+        QSqlQuery query(QSqlDatabase::database("main_connection"));
         ok = query.exec(sqlCommand);
         return query;
     }
@@ -140,53 +147,76 @@ void MEX_Main::closeDB()
     db = QSqlDatabase();
     db.removeDatabase(connection);
 }
-/*
-void MEX_Main::generateProducts()
-{
-   MEX_Product BAYN = new MEX_Product("Bayer AG");
-    MEX_Product DPW = new MEX_Product("Deutsche Post AG");
-    MEX_Product EOAN = new MEX_Product("E.ON SE");
-    MEX_Product LIN = new MEX_Product("Linde AG");
-    MEX_Product VOW3 = new MEX_Product("Volkswagen AG");
-    new MEX_Product("Test");
-
-    QStringList productList;
-    productList.append(BAYN.getName());
-}
-
-*/
 
 void MEX_Main::readProductDB()
 {
-    bool ok;
+    bool ok = false;
     QString sqlCommand = "SELECT symbol, name FROM productList";
-    QSqlQuery query  = executeQuery(sqlCommand, ok);
+    QSqlQuery query(QSqlDatabase::database("main_connection"));
+
+    query  = executeQuery(sqlCommand, ok);
 
     if (ok)
     {
         ok = query.first();								//go to first line
-        while (ok) {
+        while (ok)
+        {
             productSymbolList.append(query.value(0).toString());	//fill QStringList
             productNameList.append(query.value(1).toString());	//fill QStringList
             ok = query.next();									//get next line
         } //while there are next lines
-    } else
+    }
+    else
     {
         QMessageBox messageBox;
+
         messageBox.critical(0,"Error","Database not found.");
         ui->actionUser_Panel->setVisible(false);
         messageBox.show();
     }
+
     ui->cBoxProductShow->addItems(productNameList);
     ui->cBoxProductExec->addItems(productNameList);
 }
 
 void MEX_Main::generateProducts(QStringList symbol, QStringList name)
-{
-    for (int i = 0; i < symbol.size() ; i++){
+{    
+    for (int i = 0; i < symbol.size(); ++i)
+    {
         productList.append(new MEX_Product(symbol.value(i), name.value(i)));
     }
-    for (int i = 0; i < productList.size() ; i++){
-        qDebug() << productList.value(i)->getName();
+}
+
+void MEX_Main::loadTrader()
+{
+    bool ok = false;
+
+    QString   sqlCommand = "SELECT user, pass, usertype, credit FROM userList WHERE id = '" + userID + "' ";
+
+    QSqlQuery query(QSqlDatabase::database("main_connection"));
+
+    query  = executeQuery(sqlCommand, ok);
+
+    /** if the query successfully executed, then get the trader information */
+    if ( ok == true )
+    {
+        query.first();
+        traderID = userID;
+        username = query.record().value(0).toString();
+        password = query.record().value(1).toString();
+        permission = query.record().value(2).toString();
+        credit = query.record().value(3).toInt();
+        trader.setTraderID(traderID);
+        trader.setName(username);
+        trader.setPassword(password);
+        trader.setPermission(permission);
+        trader.setCredit(credit);
+    }
+    else
+    {
+        QMessageBox messageBox;
+
+        messageBox.critical(0,"Error","Database not found.");
+        messageBox.show();
     }
 }

@@ -1,6 +1,5 @@
 #include "mex_myaccount.h"
 #include "ui_mex_myaccount.h"
-#include <QDebug>
 
 // Constructor
 
@@ -10,16 +9,20 @@ MEX_MyAccount::MEX_MyAccount(QString userID, QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size()); //Set fixed window size
+
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
+
     db = QSqlDatabase::addDatabase("QSQLITE", "myAccount_connection"); //"myAccount_connection"
     db.setDatabaseName(dbPath);
 
     setUserID(userID);
-    bool ok;
+    bool ok = false;
+
     QString sqlCommand = "SELECT user, email, credit, usertype, pass FROM userList WHERE id = '" + userID + "' ";
+
     QSqlQuery query  = executeQuery(sqlCommand, ok);
 
-    if (ok)
+    if ( ok )
     {
         query.first();
         username = query.record().value(0).toString();
@@ -78,7 +81,7 @@ void MEX_MyAccount::changePassword(){
                     if (newUserpass.length() > 4)
                     {
                         QString cryptpass = encrypt(newUserpass);
-                        bool ok;
+                        bool ok = false;
                         QString sqlCommand = "UPDATE userList SET pass = '" + cryptpass + "' WHERE user = '" + username + "' ";
                         QSqlQuery query(QSqlDatabase::database("userpanel_connection"));
                         query = executeQuery(sqlCommand, ok);

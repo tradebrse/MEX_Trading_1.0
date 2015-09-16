@@ -1,20 +1,26 @@
 #include "mex_trader.h"
 using namespace std;
 
-MEX_Trader::MEX_Trader(QString username, QString password, long traderID, QString permission, int credit)
+MEX_Trader::MEX_Trader()
 {
-    this->username=username;
-    this->password=password;
-    this->traderID=traderID;
-    this->permission=permission;
-    this->credit=credit;
+}
+
+MEX_Trader::MEX_Trader(const QString traderID, const QString username, QString password, QString permission, int credit)
+{
+    this->traderID = traderID;
+    this->username = username;
+    this->password = password;
+    this->permission = permission;
+    this->credit = credit;
 }
 
 MEX_Trader::~MEX_Trader()
 {
 
 }
+
 // Get Methods
+
 QString MEX_Trader::getName()
 {
     return this->username;
@@ -23,7 +29,7 @@ QString MEX_Trader::getPassword()
 {
     return this->password;
 }
-long MEX_Trader::getTraderID()
+QString MEX_Trader::getTraderID()
 {
     return this->traderID;
 }
@@ -35,35 +41,29 @@ int MEX_Trader::getCredit()
 {
     return this->credit;
 }
+
 // Set Methods
-void MEX_Trader::setName(QString username)
+
+void MEX_Trader::setName(const QString username)
 {
-    this->username=username;
-    return;
+    this->username = username;
 }
 void MEX_Trader::setPassword(QString password)
 {
     this->password=password;
-    return;
 }
-void MEX_Trader::setTraderID(long traderID)
+void MEX_Trader::setTraderID(QString traderID)
 {
     this->traderID=traderID;
-    return;
 }
 void MEX_Trader::setPermission(QString permission)
 {
     this->permission=permission;
-    return;
 }
 void MEX_Trader::setCredit(int credit)
 {
     this->credit=credit;
-    return;
 }
-//void MEX_Trade::setName(QString)
-//{
 
-//}
 
 
