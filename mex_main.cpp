@@ -9,6 +9,7 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->size()); //Set fixed window size
+    ui->radioButtonBid->setEnabled(true);
     this->setAttribute(Qt::WA_DeleteOnClose);
     setUserID(userID);
     //Setup DB
@@ -18,6 +19,9 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
 
     //load Trader data from DB
     loadTrader();
+
+    //initialize Order ID
+    orderID = 0;
 
     //generate Products
     readProductDB();
@@ -218,5 +222,64 @@ void MEX_Main::loadTrader()
 
         messageBox.critical(0,"Error","Database not found.");
         messageBox.show();
+    }
+}
+
+void MEX_Main::on_btnExecute_clicked()
+{
+    executeOrder();
+}
+
+void MEX_Main::executeOrder()
+{
+    if(ui->radioButtonAsk->isChecked())
+    {
+        buy = true;
+        sell = false;
+    }
+    else if(ui->radioButtonBid->isChecked())
+    {
+        sell = true;
+        buy = false;
+    }
+    int cBoxIndex = ui->cBoxProductExec->currentIndex();
+
+    product = productList.at(cBoxIndex);
+    QString productName = product->getName();
+    QString productSymbol = product->getSymbol();
+
+    value = ui->edtValue->text().toInt();
+    quantity = ui->edtQuantity->text().toInt();
+    comment = ui->edtComment->text();
+    orderID += 1;
+    if (buy)
+    {
+        askOrderBook.append(new MEX_Order(traderID, orderID, value, quantity, comment, product));
+        newRow = ui->tableWidgetOrderbook->rowCount();
+        ui->tableWidgetOrderbook->insertRow(newRow);
+        ui->tableWidgetOrderbook->setItem(newRow, 0,new QTableWidgetItem(productSymbol));
+        ui->tableWidgetOrderbook->setItem(newRow, 1,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 2,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 3,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 4,new QTableWidgetItem(QString::number(value)));
+        ui->tableWidgetOrderbook->setItem(newRow, 5,new QTableWidgetItem(QString::number(quantity)));
+        ui->tableWidgetOrderbook->setItem(newRow, 6,new QTableWidgetItem("0"));
+        ui->tableWidgetOrderbook->setItem(newRow, 7,new QTableWidgetItem(comment));
+        buy = false;
+    }
+    else if(sell)
+    {
+        bidOrderBook.append((new MEX_Order(traderID, orderID, value, quantity, comment, product)));
+        newRow = ui->tableWidgetOrderbook->rowCount();
+        ui->tableWidgetOrderbook->insertRow(newRow);
+        ui->tableWidgetOrderbook->setItem(newRow, 0,new QTableWidgetItem(productSymbol));
+        ui->tableWidgetOrderbook->setItem(newRow, 1,new QTableWidgetItem("0"));
+        ui->tableWidgetOrderbook->setItem(newRow, 2,new QTableWidgetItem(QString::number(quantity)));
+        ui->tableWidgetOrderbook->setItem(newRow, 3,new QTableWidgetItem(QString::number(value)));
+        ui->tableWidgetOrderbook->setItem(newRow, 4,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 5,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 6,new QTableWidgetItem(""));
+        ui->tableWidgetOrderbook->setItem(newRow, 7,new QTableWidgetItem(comment));
+        sell = false;
     }
 }

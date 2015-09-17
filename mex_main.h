@@ -6,6 +6,7 @@
 #include <mex_myaccount.h>
 #include <mex_product.h>
 #include <mex_trader.h>
+#include <mex_order.h>
 #include <QMainWindow>
 #include <QDebug>
 
@@ -58,6 +59,10 @@ private slots:
 
     void loadTrader();
 
+    void on_btnExecute_clicked();
+
+    void executeOrder();
+
 private:
     Ui::MEX_Main *ui;
 
@@ -77,7 +82,7 @@ private:
 
     QStringList productSymbolList;
 
-    QList<MEX_Product*> productList; //product*
+    QList<MEX_Product*> productList;
 
     MEX_Trader trader;
 
@@ -91,6 +96,19 @@ private:
 
     int credit;
 
+    QList<MEX_Order*> bidOrderBook;
+
+    QList<MEX_Order*> askOrderBook;
+
+    //Order attritbutes//
+    int orderID; //static?
+    int value;
+    int quantity;
+    QString comment;
+    bool buy;
+    bool sell;
+    MEX_Product* product;
+    int newRow;
 
 protected:
 

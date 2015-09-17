@@ -2,12 +2,12 @@
 #define MEX_PRODUCT_H
 #include <QString>
 
-using namespace std;
 
 class MEX_Product
 {
 public:
     MEX_Product(QString symbol, QString name);
+    MEX_Product();
     ~MEX_Product();
 
     QString getName();
@@ -18,7 +18,6 @@ public:
 
 private:
     QString name;
-
     QString symbol;
 };
 
