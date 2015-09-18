@@ -2,7 +2,6 @@
 
 MEX_Order::MEX_Order()
 {
-
 }
 
 MEX_Order::~MEX_Order()
