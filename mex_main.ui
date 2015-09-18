@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
+   <widget class="QGroupBox" name="groupBoxExecuteBidAsk">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -36,7 +36,7 @@
     <property name="title">
      <string/>
     </property>
-    <widget class="QRadioButton" name="radioButton_7">
+    <widget class="QRadioButton" name="radioButtonBid">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -49,7 +49,7 @@
       <string>Bid</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_8">
+    <widget class="QRadioButton" name="radioButtonAsk">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -62,9 +62,6 @@
       <string>Ask</string>
      </property>
     </widget>
-    <zorder>radioButton_7</zorder>
-    <zorder>radioButton_8</zorder>
-    <zorder>lblInfoOutput</zorder>
    </widget>
    <widget class="QLabel" name="lblTradingGUI">
     <property name="geometry">
@@ -123,7 +120,7 @@
    <widget class="QPushButton" name="btnExecute">
     <property name="geometry">
      <rect>
-      <x>510</x>
+      <x>670</x>
       <y>530</y>
       <width>75</width>
       <height>23</height>
@@ -136,8 +133,8 @@
    <widget class="QLabel" name="lblInfoOutput">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>570</y>
+      <x>290</x>
+      <y>560</y>
       <width>731</width>
       <height>71</height>
      </rect>
@@ -175,6 +172,11 @@
     </property>
     <column>
      <property name="text">
+      <string>Symbol</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>Avg. Price</string>
      </property>
     </column>
@@ -201,6 +203,11 @@
     <column>
      <property name="text">
       <string>Avg. Price</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Comment</string>
      </property>
     </column>
    </widget>
@@ -263,7 +270,7 @@
      <string>Log out</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_5">
+   <widget class="QGroupBox" name="groupBoxShowAll">
     <property name="geometry">
      <rect>
       <x>150</x>
@@ -275,7 +282,7 @@
     <property name="title">
      <string/>
     </property>
-    <widget class="QRadioButton" name="radioButton_9">
+    <widget class="QRadioButton" name="radioButtonAll">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -288,7 +295,7 @@
       <string>All</string>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_10">
+    <widget class="QRadioButton" name="radioButtonMine">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -301,6 +308,29 @@
       <string>Mine</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QLineEdit" name="edtComment">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>530</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lblComment">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>510</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Comment</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
