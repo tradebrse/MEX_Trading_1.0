@@ -2,8 +2,6 @@
 #define MEX_TRADER_H
 #include <QString>
 
-using namespace std;
-
 class MEX_Trader
 {
 public:

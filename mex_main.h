@@ -9,6 +9,7 @@
 #include <mex_order.h>
 #include <QMainWindow>
 #include <QDebug>
+#include <ui_mex_main.h>
 
 //---------------//
 //      SQL      //
@@ -62,6 +63,8 @@ private slots:
     void on_btnExecute_clicked();
 
     void executeOrder();
+
+    bool checkForMatch(MEX_Order, QList, QTableWidget);
 
 private:
     Ui::MEX_Main *ui;

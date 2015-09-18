@@ -43,7 +43,7 @@ public:
 private:
 
     QString traderID;
-    QString orderID;
+    int orderID;
     int value;
     int quantity;
     QString comment;
@@ -51,7 +51,6 @@ private:
     bool buy;
     bool sell;
     MEX_Product* product;
-   // MEX_Product product;
 
     //
 };

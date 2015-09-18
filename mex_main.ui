@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>788</width>
-    <height>694</height>
+    <width>1055</width>
+    <height>707</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,12 +161,12 @@
      <string>Product</string>
     </property>
    </widget>
-   <widget class="QTableWidget" name="tableWidgetOrderbook">
+   <widget class="QTableWidget" name="tableWidgetOrderbookBid">
     <property name="geometry">
      <rect>
       <x>30</x>
       <y>150</y>
-      <width>721</width>
+      <width>511</width>
       <height>351</height>
      </rect>
     </property>
@@ -188,21 +188,6 @@
     <column>
      <property name="text">
       <string>Bid</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Ask</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Quantity</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Avg. Price</string>
      </property>
     </column>
     <column>
@@ -260,8 +245,8 @@
    <widget class="QPushButton" name="btnLogOut">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>10</y>
+      <x>940</x>
+      <y>100</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -332,13 +317,48 @@
      <string>Comment</string>
     </property>
    </widget>
+   <widget class="QTableWidget" name="tableWidgetOrderbookAsk">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>150</y>
+      <width>511</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Symbol</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Avg. Price</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Quantity</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Ask</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Comment</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>788</width>
+     <width>1055</width>
      <height>21</height>
     </rect>
    </property>
@@ -363,6 +383,21 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>cBoxProductShow</tabstop>
+  <tabstop>radioButtonAll</tabstop>
+  <tabstop>radioButtonMine</tabstop>
+  <tabstop>btnShow</tabstop>
+  <tabstop>tableWidgetOrderbookBid</tabstop>
+  <tabstop>radioButtonBid</tabstop>
+  <tabstop>radioButtonAsk</tabstop>
+  <tabstop>cBoxProductExec</tabstop>
+  <tabstop>edtValue</tabstop>
+  <tabstop>edtQuantity</tabstop>
+  <tabstop>edtComment</tabstop>
+  <tabstop>btnExecute</tabstop>
+  <tabstop>btnLogOut</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
