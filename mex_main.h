@@ -64,7 +64,9 @@ private slots:
 
     void executeOrder();
 
-    bool checkForMatch(MEX_Order, QList, QTableWidget);
+    bool checkForMatch(MEX_Order*, QList<MEX_Order*>&, QTableWidget*&);
+
+    void refreshTable();
 
 private:
     Ui::MEX_Main *ui;

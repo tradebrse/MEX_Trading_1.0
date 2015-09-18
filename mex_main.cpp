@@ -228,6 +228,7 @@ void MEX_Main::loadTrader()
 void MEX_Main::on_btnExecute_clicked()
 {
     executeOrder();
+    refreshTable();
 }
 
 void MEX_Main::executeOrder()
@@ -255,7 +256,10 @@ void MEX_Main::executeOrder()
     if (buy)
     {
         bool match = false;
-        match = checkForMatch(new MEX_Order(traderID, orderID, value, quantity, comment, product), bidOrderBook, ui->tableWidgetOrderbookBid );
+        if (ui->tableWidgetOrderbookBid->rowCount() !=0)
+        {
+            match = checkForMatch(new MEX_Order(traderID, orderID, value, quantity, comment, product), bidOrderBook, ui->tableWidgetOrderbookBid );
+        }
         if(match == false)
         {
             askOrderBook.append(new MEX_Order(traderID, orderID, value, quantity, comment, product));
@@ -272,7 +276,10 @@ void MEX_Main::executeOrder()
     else if(sell)
     {
         bool match = false;
+        if (ui->tableWidgetOrderbookAsk->rowCount() !=0)
+        {
         match = checkForMatch(new MEX_Order(traderID, orderID, value, quantity, comment, product), askOrderBook, ui->tableWidgetOrderbookAsk );
+        }
         if(match == false)
         {
             bidOrderBook.append((new MEX_Order(traderID, orderID, value, quantity, comment, product)));
@@ -288,30 +295,33 @@ void MEX_Main::executeOrder()
     }
 }
 
-bool MEX_Main::checkForMatch(MEX_Order &order, QList &orderList, QTableWidget tablewidget)
+bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tablewidget)
 {
     bool match = false;
-    QList<MEX_Order>::iterator i;
-    for(i=orderList.begin(); i!=orderList.end(); i++){
-        if(i->getProduct() == order.getProduct())
+    QList<MEX_Order*>::iterator i;
+    for(i = orderList.begin(); i != orderList.end(); i++){
+        if((*i)->getProduct() == order->getProduct())
         {
-            if(i->getValue() == order.getValue())
+            if((*i)->getValue() == order->getValue())
             {
                 match = true;
-                if( i->getQuantity() >= order.getQuantity())
+                ui->lblInfoOutput->setText("Order matched.");
+                if((*i)->getQuantity() >= order->getQuantity())
                 {
-                    int newQuantity = i->getQuantity() - order.getQuantity();
+                    int newQuantity = (*i)->getQuantity() - order->getQuantity();
                     if (newQuantity == 0)
                     {
-                        orderList.removeAt(i->getOrderID().toInt()-1);
-                        ui->tablewidget->removeRow(i->getOrderID()-1);
+                        orderList.removeAt((*i)->getOrderID().toInt()-1);
+                        tablewidget->removeRow((*i)->getOrderID().toInt()-1);
                     }
                     else
                     {
-                        i->setQuantity(newQuantity);
+                        (*i)->setQuantity(newQuantity);
                     }
+                    //Order(s) in Liste "Matched Orders" übergeben
+                    break;
                 }
-                else if ( order.getQuantity() > i->getQuantity())
+                else if ( order->getQuantity() > (*i)->getQuantity())
                 {
                     //nach weiteren Orders im Buch suchen / restliche qunatity refusen
                 }
@@ -320,3 +330,36 @@ bool MEX_Main::checkForMatch(MEX_Order &order, QList &orderList, QTableWidget ta
     }
     return match;
 }
+
+void MEX_Main::refreshTable()
+{
+    ui->tableWidgetOrderbookAsk->clear();
+     QList<MEX_Order*>::iterator i;
+
+     for(i = askOrderBook.begin(); i != askOrderBook.end(); i++)
+     {
+         newRow = ui->tableWidgetOrderbookAsk->rowCount();
+         ui->tableWidgetOrderbookAsk->insertRow(newRow);
+         ui->tableWidgetOrderbookAsk->setItem(newRow, 0,new QTableWidgetItem((*i)->getProduct()->getSymbol()));
+         ui->tableWidgetOrderbookAsk->setItem(newRow, 1,new QTableWidgetItem("0"));
+         ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem(QString::number((*i)->getQuantity())));
+         ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getValue())));
+         ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem((*i)->getComment()));
+     }
+
+     ui->tableWidgetOrderbookBid->clear();
+      QList<MEX_Order*>::iterator j;
+
+      for(j = bidOrderBook.begin(); j != bidOrderBook.end(); j++)
+      {
+          newRow = ui->tableWidgetOrderbookAsk->rowCount();
+          ui->tableWidgetOrderbookBid->insertRow(newRow);
+          ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct()->getSymbol()));
+          ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem("0"));
+          ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem(QString::number((*j)->getQuantity())));
+          ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getValue())));
+          ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem((*j)->getComment()));
+      }
+}
+
+//tableWidget akutalisieren Methode schrieben

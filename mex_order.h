@@ -43,7 +43,7 @@ public:
 private:
 
     QString traderID;
-    int orderID;
+    QString orderID;
     int value;
     int quantity;
     QString comment;
