@@ -23,8 +23,8 @@ public:
     QString getComment();
     void setComment(QString);
     QDateTime getTime();
-    //MEX_Product getProduct();
-    //void setProduct(MEX_Product);
+    MEX_Product *getProduct();
+    void setProduct(MEX_Product *);
 
 
 //public slots:
@@ -50,6 +50,7 @@ private:
     QDateTime time;
     bool buy;
     bool sell;
+    MEX_Product* product;
    // MEX_Product product;
 
     //

@@ -11,7 +11,7 @@ MEX_Order::MEX_Order(QString traderID, int orderID, int value, int quantity, QSt
     this->value = value;
     this->quantity = quantity;
     this->comment = comment;
-    MEX_Product* product1 = product;
+    this->product = product;
     time = QDateTime::currentDateTime();
 }
 
@@ -46,10 +46,10 @@ QDateTime MEX_Order::getTime()
     return this->time;
 }
 
-/*MEX_Product MEX_Order::getProduct()
+MEX_Product* MEX_Order::getProduct()
 {
     return this->product;
-}*/
+}
 
 //Setter methods
 void MEX_Order::setTraderID(QString traderID)
@@ -73,7 +73,7 @@ void MEX_Order::setComment(QString comment)
     this->comment = comment;
 }
 
-/*void MEX_Order::setProduct(MEX_Product product)
+void MEX_Order::setProduct(MEX_Product* product)
 {
     this->product = product;
-}*/
+}
