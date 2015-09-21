@@ -352,7 +352,7 @@ void MEX_Main::refreshTable()
 
       for(j = bidOrderBook.begin(); j != bidOrderBook.end(); j++)
       {
-          newRow = ui->tableWidgetOrderbookAsk->rowCount();
+          newRow = ui->tableWidgetOrderbookBid->rowCount();
           ui->tableWidgetOrderbookBid->insertRow(newRow);
           ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct()->getSymbol()));
           ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem("0"));
