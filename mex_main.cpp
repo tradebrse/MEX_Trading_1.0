@@ -246,16 +246,15 @@ void MEX_Main::executeOrder()
     int cBoxIndex = ui->cBoxProductExec->currentIndex();
 
     product = productList.at(cBoxIndex);
-    QString productName = product->getName();
-    QString productSymbol = product->getSymbol();
-
     value = ui->edtValue->text().toInt();
     quantity = ui->edtQuantity->text().toInt();
     comment = ui->edtComment->text();
     orderID += 1;
     if (buy)
     {
-        bool match = false;
+        qDebug() << "Test 1";
+        addOrder(new MEX_Order(traderID, orderID, value, quantity, comment, product), askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid );
+        /*bool match = false;
         if (ui->tableWidgetOrderbookBid->rowCount() !=0)
         {
             match = checkForMatch(new MEX_Order(traderID, orderID, value, quantity, comment, product), bidOrderBook, ui->tableWidgetOrderbookBid );
@@ -270,12 +269,14 @@ void MEX_Main::executeOrder()
             ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem(QString::number(quantity)));
             ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number(value)));
             ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem(comment));
-        }
+        }*/
         buy = false;
     }
     else if(sell)
     {
-        bool match = false;
+                qDebug() << "Test 2";
+        addOrder(new MEX_Order(traderID, orderID, value, quantity, comment, product), bidOrderBook, ui->tableWidgetOrderbookBid, askOrderBook, ui->tableWidgetOrderbookAsk);
+        /*bool match = false;
         if (ui->tableWidgetOrderbookAsk->rowCount() !=0)
         {
             match = checkForMatch(new MEX_Order(traderID, orderID, value, quantity, comment, product), askOrderBook, ui->tableWidgetOrderbookAsk );
@@ -290,12 +291,49 @@ void MEX_Main::executeOrder()
             ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem(QString::number(quantity)));
             ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number(value)));
             ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem(comment));
-        }
+        }*/
         sell = false;
     }
 }
 
-bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tablewidget)
+void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget, QList<MEX_Order*> &matchOrderBook, QTableWidget* &matchTableWidget )
+{
+    bool match = false;
+    if (matchTableWidget->rowCount() !=0)
+    {
+         qDebug() << "Test 3";
+        match = checkForMatch(order, matchOrderBook, matchTableWidget);
+    }
+    if(match == false)
+    {
+         qDebug() << "Test 4";
+        addOrderBook.append(order);
+        newRow = addTableWidget->rowCount();
+       qDebug() << "rowcount" << addTableWidget->rowCount();
+        addTableWidget->insertRow(newRow);
+         qDebug() << order->getComment();
+        addTableWidget->setItem(newRow, 0,new QTableWidgetItem(order->getProduct()->getSymbol()));
+        addTableWidget->setItem(newRow, 1,new QTableWidgetItem("0"));
+        addTableWidget->setItem(newRow, 2,new QTableWidgetItem(QString::number(order->getQuantity())));
+        addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getValue())));
+        addTableWidget->setItem(newRow, 4,new QTableWidgetItem(order->getComment()));
+    }
+}
+
+void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
+{
+    addOrderBook.append(order);
+    newRow = addTableWidget->rowCount();
+    addTableWidget->insertRow(newRow);
+     qDebug() << order->getComment();
+    addTableWidget->setItem(newRow, 0,new QTableWidgetItem(order->getProduct()->getSymbol()));
+    addTableWidget->setItem(newRow, 1,new QTableWidgetItem("0"));
+    addTableWidget->setItem(newRow, 2,new QTableWidgetItem(QString::number(order->getQuantity())));
+    addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getValue())));
+    addTableWidget->setItem(newRow, 4,new QTableWidgetItem(order->getComment()));
+}
+
+bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tableWidget)
 {
     bool match = false;
     QList<MEX_Order*>::iterator i;
@@ -313,8 +351,8 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     {
                         qDebug()<< "indexOf" << orderList.indexOf((*i));
                         orderList.removeAt(orderList.indexOf((*i)));
-                        tablewidget->removeRow(orderList.indexOf((*i)));
-                        order->setValue(newQuantity);
+                        tableWidget->removeRow(orderList.indexOf((*i)));
+                        order->setQuantity(newQuantity);
                     }
                     else
                     {
@@ -326,8 +364,14 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                 {
                     int newQuantity = order->getQuantity() - (*i)->getQuantity();
                     (*i)->setQuantity(0);
+                    orderList.removeAt(orderList.indexOf((*i)));
+                    tableWidget->removeRow(orderList.indexOf((*i)));
                     order->setQuantity(newQuantity);
-
+                    if(i == orderList.end() && order->getQuantity() > 0)
+                    {
+                        //////FUNKTIONIERT NOCH NICHT GANZ...
+                            addOrder(order, orderList, tableWidget);
+                    }
                     //nach weiteren Orders im Buch suchen / restliche qunatity refusen
                 }
             }

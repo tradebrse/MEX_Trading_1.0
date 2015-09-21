@@ -64,7 +64,11 @@ private slots:
 
     void executeOrder();
 
-    bool checkForMatch(MEX_Order*, QList<MEX_Order*>&, QTableWidget*&);
+    bool checkForMatch(MEX_Order*, QList<MEX_Order*>&, QTableWidget*&tableWidget);
+
+    void addOrder(MEX_Order *order, QList<MEX_Order*>& addOrderBook, QTableWidget*& addTableWidget, QList<MEX_Order*>& matchOrderBook, QTableWidget*& matchTableWidget); //Overloaded function -> checks for order match, then adds Order to book
+
+    void addOrder(MEX_Order* order, QList<MEX_Order*>& addOrderBook, QTableWidget *&addTableWidget); //Overloaded function -> only adds order to book
 
     void refreshTable();
 
