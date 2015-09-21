@@ -25,7 +25,7 @@ QString MEX_Order::getTraderID()
 {
     return this->traderID;
 }
-QString MEX_Order::getOrderID()
+int MEX_Order::getOrderID()
 {
     return this->orderID;
 }
@@ -56,7 +56,7 @@ void MEX_Order::setTraderID(QString traderID)
 {
    this->traderID = traderID;
 }
-void MEX_Order::setOrderID(QString orderID)
+void MEX_Order::setOrderID(int orderID)
 {
     this->orderID = orderID;
 }

@@ -14,8 +14,8 @@ public:
     // Getter/Setter methods
     QString getTraderID();
     void setTraderID(QString);
-    QString getOrderID();
-    void setOrderID(QString);
+    int getOrderID();
+    void setOrderID(int);
     int getValue();
     void setValue(int);
     int getQuantity();
@@ -43,7 +43,7 @@ public:
 private:
 
     QString traderID;
-    QString orderID;
+    int orderID;
     int value;
     int quantity;
     QString comment;
