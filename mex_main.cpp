@@ -266,6 +266,7 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
     bool match = false;
     if (matchTableWidget->rowCount() !=0)
     {
+        qDebug() << "matcher";
         match = checkForMatch(order, matchOrderBook, matchTableWidget, addOrderBook, addTableWidget);
     }
     if(match == false)
@@ -332,7 +333,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
             }
         }
     }
-    if(order->getQuantity() > 0)
+    if(match == true && order->getQuantity() > 0)
     {
         addOrder(order, addOrderBook, addTableWidget);
     }
