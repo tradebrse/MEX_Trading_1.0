@@ -1,9 +1,7 @@
 #include "mex_product.h"
 
-MEX_Product::MEX_Product(QString symbol, QString name)
+MEX_Product::MEX_Product()
 {
-    this->name=name;
-    this->symbol=symbol;
 }
 
 MEX_Product::~MEX_Product()
@@ -25,11 +23,9 @@ QString MEX_Product::getSymbol()
 void MEX_Product::setName(QString name)
 {
     this->name = name;
-    return;
 }
 
 void MEX_Product::setSymbol(QString symbol)
 {
     this->symbol = symbol;
-    return;
 }

@@ -9,6 +9,7 @@
 #include <mex_order.h>
 #include <QMainWindow>
 #include <QDebug>
+#include <QVarLengthArray>
 #include <ui_mex_main.h>
 
 //---------------//
@@ -64,11 +65,11 @@ private slots:
 
     void executeOrder();
 
-    bool checkForMatch(MEX_Order*, QList<MEX_Order*>&, QTableWidget*&tableWidget, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget);
+    bool checkForMatch(MEX_Order*, QList<MEX_Order*>&, QTableWidget *&, QList<MEX_Order*> &, QTableWidget *&);
 
-    void addOrder(MEX_Order *order, QList<MEX_Order*>& addOrderBook, QTableWidget*& addTableWidget, QList<MEX_Order*>& matchOrderBook, QTableWidget*& matchTableWidget); //Overloaded function -> checks for order match, then adds Order to book
+    void addOrder(MEX_Order*, QList<MEX_Order*>&, QTableWidget *&, QList<MEX_Order*> &, QTableWidget *&); //Overloaded function -> checks for order match, then adds Order to book
 
-    void addOrder(MEX_Order* order, QList<MEX_Order*>& addOrderBook, QTableWidget *&addTableWidget); //Overloaded function -> only adds order to book
+    void addOrder(MEX_Order*, QList<MEX_Order*>&, QTableWidget *&a); //Overloaded function -> only adds order to book
 
     void refreshTable();
 
@@ -91,7 +92,7 @@ private:
 
     QStringList productSymbolList;
 
-    QList<MEX_Product*> productList;
+    QList<MEX_Product> productList;
 
     MEX_Trader trader;
 
@@ -116,8 +117,9 @@ private:
     QString comment;
     bool buy;
     bool sell;
-    MEX_Product* product;
+    MEX_Product product;
     int newRow;
+    QVarLengthArray<int> ordersToDelete;
 
 protected:
 

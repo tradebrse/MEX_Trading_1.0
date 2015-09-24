@@ -1,12 +1,11 @@
 #ifndef MEX_PRODUCT_H
 #define MEX_PRODUCT_H
 #include <QString>
-
+#include <iostream>
 
 class MEX_Product
 {
 public:
-    MEX_Product(QString symbol, QString name);
     MEX_Product();
     ~MEX_Product();
 
