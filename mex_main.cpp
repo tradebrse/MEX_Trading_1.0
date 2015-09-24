@@ -189,7 +189,7 @@ void MEX_Main::generateProducts(QStringList symbol, QStringList name)
     for (int i = 0; i < symbol.size(); ++i)
     {
         product.setName(name.value(i));
-        product.setSymbol(symbol.value(i));    // = new MEX_Product(symbol.value(i), name.value(i));
+        product.setSymbol(symbol.value(i));
         productList.append(product);
     }
 }
@@ -254,18 +254,18 @@ void MEX_Main::executeOrder()
     comment = ui->edtComment->text();
     orderID += 1;
 
-    MEX_Order *tmp;
+    MEX_Order *tmpOrder;
 
     if (buy)
     {
-        tmp = new MEX_Order(traderID, orderID, value, quantity, comment, product);
-        addOrder( tmp, askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid );
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product);
+        addOrder( tmpOrder, askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid );
         buy = false;
     }
     else if(sell)
     {
-        tmp = new MEX_Order(traderID, orderID, value, quantity, comment, product);
-        addOrder( tmp, bidOrderBook, ui->tableWidgetOrderbookBid, askOrderBook, ui->tableWidgetOrderbookAsk);
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product);
+        addOrder( tmpOrder, bidOrderBook, ui->tableWidgetOrderbookBid, askOrderBook, ui->tableWidgetOrderbookAsk);
         sell = false;
 
     }
@@ -273,23 +273,16 @@ void MEX_Main::executeOrder()
 
 void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget, QList<MEX_Order*> &matchOrderBook, QTableWidget* &matchTableWidget )
 {
-    //qDebug() << "addOrder : " << order->getComment() << ":" << order->getProduct();
-    qDebug() << order->getProduct().getName();
     bool match = false;
 
     if (matchTableWidget->rowCount() !=0)
     {
-        qDebug() << "Row count is greater than 0";
         match = checkForMatch(order, matchOrderBook, matchTableWidget, addOrderBook, addTableWidget);
     }
 
     if(match == false)
     {
-        qDebug() << "match == false ";
-
         addOrderBook.append(order);
-
-        qDebug() << "after append ";
         newRow = addTableWidget->rowCount();
         addTableWidget->insertRow(newRow);
         addTableWidget->setItem(newRow, 0,new QTableWidgetItem(order->getProduct().getSymbol()));
