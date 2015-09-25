@@ -29,3 +29,15 @@ void MEX_Product::setSymbol(QString symbol)
 {
     this->symbol = symbol;
 }
+
+bool MEX_Product::operator==(const MEX_Product &product) const
+{
+    if(product.name == name && product.symbol == symbol)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

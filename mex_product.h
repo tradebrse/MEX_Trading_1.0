@@ -15,6 +15,8 @@ public:
     void setName(QString);
     void setSymbol(QString);
 
+    bool operator==(const MEX_Product &product) const;
+
 private:
     QString name;
     QString symbol;

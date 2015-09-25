@@ -11,7 +11,8 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
 
     ui->setupUi(this);
     this->setFixedSize(this->size()); //Set fixed window size
-    ui->radioButtonBid->setEnabled(true);
+    ui->radioButtonBid->setChecked(true);
+    ui->radioButtonAll->setChecked(true);
     this->setAttribute(Qt::WA_DeleteOnClose);
     setUserID(userID);
     //Setup DB
@@ -312,7 +313,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
 
     for( i = orderList.begin(); i != orderList.end(); i++)
     {
-        if( (*i)->getProduct().getSymbol() == order->getProduct().getSymbol()) //TODO: Add == operator for product
+        if( (*i)->getProduct() == order->getProduct())
         {
             if((*i)->getValue() == order->getValue())
             {
@@ -327,6 +328,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     {
                         tableWidget->removeRow(orderList.indexOf((*i)));
                         ordersToDelete.append(orderList.indexOf((*i)));
+                        matchedOrders.append(orderList.indexOf((*i)), order);
                         order->setQuantity(newQuantity);
                     }
                     else
@@ -341,7 +343,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     int newQuantity = order->getQuantity() - (*i)->getQuantity();
                     (*i)->setQuantity(0);
                     tableWidget->removeRow(orderList.indexOf((*i)));
-                    orderList.removeAt(orderList.indexOf((*i)));
+                    ordersToDelete.append(orderList.indexOf((*i)));
                     order->setQuantity(newQuantity);
                     //nach weiteren Orders im Buch suchen
                 }
@@ -349,7 +351,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
             }
         }
     }
-     if (match == true && order->getQuantity() == 0)
+     if (match == true)
      {
          //delete orders from list
          for(int i = 0; i < ordersToDelete.length(); i++)
@@ -358,8 +360,11 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
          }
          ordersToDelete.clear();
      }
+
     if (match == true && order->getQuantity() > 0)
     {
+
+
         addOrder(order, addOrderBook, addTableWidget);
     }
     return match;

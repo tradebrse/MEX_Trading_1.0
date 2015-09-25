@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1055</width>
+    <width>1112</width>
     <height>707</height>
    </rect>
   </property>
@@ -166,7 +166,7 @@
      <rect>
       <x>30</x>
       <y>150</y>
-      <width>511</width>
+      <width>521</width>
       <height>351</height>
      </rect>
     </property>
@@ -320,9 +320,9 @@
    <widget class="QTableWidget" name="tableWidgetOrderbookAsk">
     <property name="geometry">
      <rect>
-      <x>540</x>
+      <x>550</x>
       <y>150</y>
-      <width>511</width>
+      <width>521</width>
       <height>351</height>
      </rect>
     </property>
@@ -358,7 +358,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1055</width>
+     <width>1112</width>
      <height>21</height>
     </rect>
    </property>
