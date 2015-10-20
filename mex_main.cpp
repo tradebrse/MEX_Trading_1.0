@@ -1,5 +1,6 @@
 #include "mex_main.h"
 #include "ui_mex_main.h"
+#include <QDebug>
 
 // Constructor
 
@@ -13,6 +14,9 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     this->setFixedSize(this->size()); //Set fixed window size
     ui->radioButtonBid->setChecked(true);
     ui->radioButtonAll->setChecked(true);
+    ui->checkBoxAllProducts->setChecked(true);
+    connect(ui->checkBoxAllProducts, SIGNAL(clicked(bool)), ui->cBoxProductShow, SLOT(setDisabled(bool)));
+
     this->setAttribute(Qt::WA_DeleteOnClose);
     setUserID(userID);
     //Setup DB
@@ -232,7 +236,7 @@ void MEX_Main::loadTrader()
 void MEX_Main::on_btnExecute_clicked()
 {
     executeOrder();
-    refreshTable();
+    refreshTable("ALL","ALL");
 }
 
 void MEX_Main::executeOrder()
@@ -352,15 +356,15 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
             }
         }
     }
-     if (match == true)
-     {
-         //delete orders from list
-         for(int i = 0; i < ordersToDelete.length(); i++)
-         {
+    if (match == true)
+    {
+        //delete orders from list
+        for(int i = 0; i < ordersToDelete.length(); i++)
+        {
             orderList.removeAt(ordersToDelete.value(i));
-         }
-         ordersToDelete.clear();
-     }
+        }
+        ordersToDelete.clear();
+    }
 
     if (match == true && order->getQuantity() > 0)
     {
@@ -371,41 +375,75 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
     return match;
 }
 
-void MEX_Main::refreshTable()
+void MEX_Main::refreshTable(QString products, QString user)
 {
     while (ui->tableWidgetOrderbookAsk->rowCount() > 0)
     {
-        ui->tableWidgetOrderbookAsk->removeRow(0);
+        ui->tableWidgetOrderbookAsk->removeRow(0); //Remove all current rows from tablewidget
     }
     QList<MEX_Order*>::iterator i;
 
     for(i = askOrderBook.begin(); i != askOrderBook.end(); i++)
     {
-        newRow = ui->tableWidgetOrderbookAsk->rowCount();
-        ui->tableWidgetOrderbookAsk->insertRow(newRow);
-        ui->tableWidgetOrderbookAsk->setItem(newRow, 0,new QTableWidgetItem((*i)->getProduct().getSymbol()));
-        ui->tableWidgetOrderbookAsk->setItem(newRow, 1,new QTableWidgetItem("0"));
-        ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem(QString::number((*i)->getQuantity())));
-        ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getValue())));
-        ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem((*i)->getComment()));
+        if((products == "ALL" || products == (*i)->getProduct().getName()) && (user == "ALL" || user == (*i)->getTraderID()))
+        {
+            newRow = ui->tableWidgetOrderbookAsk->rowCount(); //Get current row
+
+            ui->tableWidgetOrderbookAsk->insertRow(newRow);
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 0,new QTableWidgetItem((*i)->getProduct().getSymbol()));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 1,new QTableWidgetItem("0"));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem(QString::number((*i)->getQuantity())));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getValue())));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem((*i)->getComment()));
+        }
     }
 
     while (ui->tableWidgetOrderbookBid->rowCount() > 0)
     {
-        ui->tableWidgetOrderbookBid->removeRow(0);
+        ui->tableWidgetOrderbookBid->removeRow(0); //Remove all current rows from tablewidget
     }
     QList<MEX_Order*>::iterator j;
 
     for(j = bidOrderBook.begin(); j != bidOrderBook.end(); j++)
     {
-        newRow = ui->tableWidgetOrderbookBid->rowCount();
-        ui->tableWidgetOrderbookBid->insertRow(newRow);
-        ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct().getSymbol()));
-        ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem("0"));
-        ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem(QString::number((*j)->getQuantity())));
-        ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getValue())));
-        ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem((*j)->getComment()));
+        if((products == "ALL" || products == (*j)->getProduct().getName()) && (user == "ALL" || user == (*j)->getTraderID()))
+        {
+            newRow = ui->tableWidgetOrderbookBid->rowCount();
+
+            ui->tableWidgetOrderbookBid->insertRow(newRow);
+            ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct().getSymbol()));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem("0"));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem(QString::number((*j)->getQuantity())));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getValue())));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem((*j)->getComment()));
+        }
     }
 }
 
-//tableWidget akutalisieren Methode schrieben
+//TODO: tableWidget akutalisieren Methode schrieben
+
+void MEX_Main::on_btnShow_clicked()
+{
+    QString products = "ALL";
+    QString user = "ALL";
+
+    if(ui->checkBoxAllProducts->isChecked() == true)
+    {
+        products = "ALL";
+    }
+    else
+    {
+        products = ui->cBoxProductShow->currentText();
+    }
+
+    if(ui->radioButtonAll->isChecked() == true)
+    {
+        user = "ALL";
+    }
+    else if(ui->radioButtonMine->isChecked() == true)
+    {
+        user = userID;
+    }
+
+    refreshTable(products, user);
+}

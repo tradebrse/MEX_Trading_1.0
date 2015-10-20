@@ -71,7 +71,9 @@ private slots:
 
     void addOrder(MEX_Order*, QList<MEX_Order*>&, QTableWidget *&a); //Overloaded function -> only adds order to book
 
-    void refreshTable();
+    void refreshTable(QString, QString);
+
+    void on_btnShow_clicked();
 
 private:
     Ui::MEX_Main *ui;
