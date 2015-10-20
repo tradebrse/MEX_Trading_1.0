@@ -13,6 +13,7 @@ MEX_Login::MEX_Login(QWidget *parent) :
     QString dbPath = QApplication::applicationDirPath() + "/qt_db.sqlite";
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
+
     connect(ui->edtLogInPW, SIGNAL(returnPressed()),ui->btnLogIn,SIGNAL(clicked()));
     connect(ui->edtSignPW, SIGNAL(returnPressed()),ui->btnSignUp,SIGNAL(clicked()));
 }

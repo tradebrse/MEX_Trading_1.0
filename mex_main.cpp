@@ -328,7 +328,8 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     {
                         tableWidget->removeRow(orderList.indexOf((*i)));
                         ordersToDelete.append(orderList.indexOf((*i)));
-                        matchedOrders.append(orderList.indexOf((*i)), order);
+                        //matchedOrders.append(orderList.indexOf((*i)), order); //Matched Orders Array erstellen=
+
                         order->setQuantity(newQuantity);
                     }
                     else
