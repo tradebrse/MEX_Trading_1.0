@@ -4,7 +4,7 @@ MEX_Order::MEX_Order()
 {
 }
 
-MEX_Order::MEX_Order(QString traderID, int orderID, int value, int quantity, QString comment, MEX_Product product)
+MEX_Order::MEX_Order(QString traderID, int orderID, int value, int quantity, QString comment, MEX_Product product, QString ordertype)
 {
     this->traderID = traderID;
     this->orderID = orderID;
@@ -12,6 +12,7 @@ MEX_Order::MEX_Order(QString traderID, int orderID, int value, int quantity, QSt
     this->quantity = quantity;
     this->comment = comment;
     this->product = product;
+    this->ordertype = ordertype;
     time = QDateTime::currentDateTime();
 }
 
@@ -24,6 +25,10 @@ MEX_Order::~MEX_Order()
 QString MEX_Order::getTraderID()
 {
     return this->traderID;
+}
+QString MEX_Order::getOrdertype()
+{
+    return this->ordertype;
 }
 int MEX_Order::getOrderID()
 {

@@ -138,7 +138,7 @@ QSqlQuery MEX_Main::executeQuery( QString sqlCommand, bool &ok )
 {
     if (!db.open())
     {
-        ///db.lastError().text()
+        //db.lastError().text()
         QSqlQuery emptyQuery;
 
         return emptyQuery;
@@ -263,13 +263,13 @@ void MEX_Main::executeOrder()
 
     if (buy)
     {
-        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product);
-        addOrder( tmpOrder, askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid );
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"BID");
+        addOrder( tmpOrder, askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid);
         buy = false;
     }
     else if(sell)
     {
-        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product);
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"ASK");
         addOrder( tmpOrder, bidOrderBook, ui->tableWidgetOrderbookBid, askOrderBook, ui->tableWidgetOrderbookAsk);
         sell = false;
 
@@ -313,15 +313,17 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
 bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tableWidget, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
 {
     bool match = false;
+    bool overValue = false;
     QList<MEX_Order*>::iterator i;
 
     for( i = orderList.begin(); i != orderList.end(); i++)
     {
         if( (*i)->getProduct() == order->getProduct())
         {
-            if((*i)->getValue() == order->getValue())
+            if((order->getOrdertype() == "ASK" && (*i)->getValue() >= order->getValue()) || (order->getOrdertype() == "BID" && (*i)->getValue() <= order->getValue())) //matchedOrders Value beachten...
             {
                 match = true;
+                overValue = true;
                 ui->lblInfoOutput->setText("Order matched.");
 
                 if((*i)->getQuantity() >= order->getQuantity())
@@ -332,22 +334,34 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     {
                         tableWidget->removeRow(orderList.indexOf((*i)));
                         ordersToDelete.append(orderList.indexOf((*i)));
-                        //matchedOrders.append(orderList.indexOf((*i)), order); //Matched Orders Array erstellen=
-
-                        order->setQuantity(newQuantity);
+                        MEX_Order *tmpOrder = order;
+                        tmpOrder->setValue((*i)->getValue());
+                        matchedOrders.append((*i)); //Add to Matched Orders List
+                        matchedOrders.append(tmpOrder);//Add to Matched Orders List
+                    //Sollte passen
                     }
                     else
                     {
                         (*i)->setQuantity(newQuantity);
-                        order->setQuantity(0);
+                        MEX_Order *tmpOrder = (*i);
+                        tmpOrder->setQuantity(order->getQuantity());
+                        matchedOrders.append(tmpOrder);//Add part of book order to Matched Orders List
+                        tmpOrder = order;
+                        tmpOrder->setValue((*i)->getValue());
+                        matchedOrders.append(tmpOrder); //Add order to Matched Order List
                     }
                     //TODO: Order(s) in Liste "Matched Orders" übergeben
                 }
                 else if ( order->getQuantity() > (*i)->getQuantity())
                 {
                     int newQuantity = order->getQuantity() - (*i)->getQuantity();
-                    (*i)->setQuantity(0);
+                    MEX_Order *tmpOrder = (*i);
+                    matchedOrders.append(tmpOrder);//Add book order to Matched Orders List
                     tableWidget->removeRow(orderList.indexOf((*i)));
+                    tmpOrder = order;
+                    tmpOrder->setQuantity((*i)->getQuantity());
+                    tmpOrder->setValue((*i)->getValue());
+                    matchedOrders.append(tmpOrder);//Add part of order to Matched Orders List
                     ordersToDelete.append(orderList.indexOf((*i)));
                     order->setQuantity(newQuantity);
                     //nach weiteren Orders im Buch suchen
@@ -420,7 +434,7 @@ void MEX_Main::refreshTable(QString products, QString user)
     }
 }
 
-//TODO: tableWidget akutalisieren Methode schrieben
+//TODO: tableWidget akutalisieren Methode schrieben --- ??
 
 void MEX_Main::on_btnShow_clicked()
 {

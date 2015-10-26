@@ -112,7 +112,7 @@ private:
 
     QList<MEX_Order*> askOrderBook;
 
-    //QList<MEX_Order*, MEX_Order> matchedOrders;
+    QList<MEX_Order*> matchedOrders;
 
     //Order attritbutes//
     int orderID; //static?
