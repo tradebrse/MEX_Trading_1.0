@@ -11,15 +11,18 @@ public:
 
     QString getName();
     QString getSymbol();
+    QString getIndex();
 
     void setName(QString);
     void setSymbol(QString);
+    void setIndex(QString);
 
     bool operator==(const MEX_Product &product) const;
 
 private:
     QString name;
     QString symbol;
+    QString index;
 };
 
 #endif // MEX_PRODUCT_H

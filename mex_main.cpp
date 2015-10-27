@@ -32,7 +32,7 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
 
     //generate Products
     readProductDB();
-    generateProducts(productSymbolList, productNameList);
+    generateProducts(productSymbolList, productNameList,productIndexList);
 
     //Check usertype to activate admin mode
     bool ok = false;
@@ -162,7 +162,7 @@ void MEX_Main::closeDB()
 void MEX_Main::readProductDB()
 {
     bool ok = false;
-    QString sqlCommand = "SELECT symbol, name FROM productList";
+    QString sqlCommand = "SELECT symbol,name,indexName FROM productList";
     QSqlQuery query(QSqlDatabase::database("main_connection"));
 
     query  = executeQuery(sqlCommand, ok);
@@ -174,7 +174,8 @@ void MEX_Main::readProductDB()
         {
             productSymbolList.append(query.value(0).toString());	//fill QStringList
             productNameList.append(query.value(1).toString());	//fill QStringList
-            ok = query.next();									//get next line
+            productIndexList.append(query.value(2).toString());
+            ok = query.next(); //get next line
         } //while there are next lines
     }
     else
@@ -189,12 +190,13 @@ void MEX_Main::readProductDB()
     ui->cBoxProductExec->addItems(productNameList);
 }
 
-void MEX_Main::generateProducts(QStringList symbol, QStringList name)
+void MEX_Main::generateProducts(QStringList symbol, QStringList name, QStringList index)
 {    
     for (int i = 0; i < symbol.size(); ++i)
     {
         product.setName(name.value(i));
         product.setSymbol(symbol.value(i));
+        product.setIndex(index.value(i));
         productList.append(product);
     }
 }
@@ -291,10 +293,11 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
         newRow = addTableWidget->rowCount();
         addTableWidget->insertRow(newRow);
         addTableWidget->setItem(newRow, 0,new QTableWidgetItem(order->getProduct().getSymbol()));
-        addTableWidget->setItem(newRow, 1,new QTableWidgetItem("0"));
-        addTableWidget->setItem(newRow, 2,new QTableWidgetItem(QString::number(order->getQuantity())));
-        addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getValue())));
-        addTableWidget->setItem(newRow, 4,new QTableWidgetItem(order->getComment()));
+        addTableWidget->setItem(newRow, 1,new QTableWidgetItem(order->getProduct().getIndex()));
+        addTableWidget->setItem(newRow, 2,new QTableWidgetItem("0"));
+        addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getQuantity())));
+        addTableWidget->setItem(newRow, 4,new QTableWidgetItem(QString::number(order->getValue())));
+        addTableWidget->setItem(newRow, 5,new QTableWidgetItem(order->getComment()));
     }
 }
 
@@ -304,10 +307,11 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
     newRow = addTableWidget->rowCount();
     addTableWidget->insertRow(newRow);
     addTableWidget->setItem(newRow, 0,new QTableWidgetItem(order->getProduct().getSymbol()));
-    addTableWidget->setItem(newRow, 1,new QTableWidgetItem("0"));
-    addTableWidget->setItem(newRow, 2,new QTableWidgetItem(QString::number(order->getQuantity())));
-    addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getValue())));
-    addTableWidget->setItem(newRow, 4,new QTableWidgetItem(order->getComment()));
+    addTableWidget->setItem(newRow, 1,new QTableWidgetItem(order->getProduct().getIndex()));
+    addTableWidget->setItem(newRow, 2,new QTableWidgetItem("0"));
+    addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getQuantity())));
+    addTableWidget->setItem(newRow, 4,new QTableWidgetItem(QString::number(order->getValue())));
+    addTableWidget->setItem(newRow, 5,new QTableWidgetItem(order->getComment()));
 }
 
 bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tableWidget, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
@@ -338,7 +342,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                         tmpOrder->setValue((*i)->getValue());
                         matchedOrders.append((*i)); //Add to Matched Orders List
                         matchedOrders.append(tmpOrder);//Add to Matched Orders List
-                    //Sollte passen
+                        //Sollte passen
                     }
                     else
                     {
@@ -405,10 +409,11 @@ void MEX_Main::refreshTable(QString products, QString user)
 
             ui->tableWidgetOrderbookAsk->insertRow(newRow);
             ui->tableWidgetOrderbookAsk->setItem(newRow, 0,new QTableWidgetItem((*i)->getProduct().getSymbol()));
-            ui->tableWidgetOrderbookAsk->setItem(newRow, 1,new QTableWidgetItem("0"));
-            ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem(QString::number((*i)->getQuantity())));
-            ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getValue())));
-            ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem((*i)->getComment()));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 1,new QTableWidgetItem((*i)->getProduct().getIndex()));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 2,new QTableWidgetItem("0"));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getQuantity())));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem(QString::number((*i)->getValue())));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 5,new QTableWidgetItem((*i)->getComment()));
         }
     }
 
@@ -426,10 +431,11 @@ void MEX_Main::refreshTable(QString products, QString user)
 
             ui->tableWidgetOrderbookBid->insertRow(newRow);
             ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct().getSymbol()));
-            ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem("0"));
-            ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem(QString::number((*j)->getQuantity())));
-            ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getValue())));
-            ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem((*j)->getComment()));
+                        ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem((*j)->getProduct().getIndex()));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem("0"));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getQuantity())));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem(QString::number((*j)->getValue())));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 5,new QTableWidgetItem((*j)->getComment()));
         }
     }
 }

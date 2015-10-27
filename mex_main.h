@@ -57,7 +57,7 @@ private slots:
 
     void readProductDB();
 
-    void generateProducts(QStringList, QStringList);
+    void generateProducts(QStringList, QStringList, QStringList);
 
     void loadTrader();
 
@@ -93,6 +93,8 @@ private:
     QStringList productNameList;
 
     QStringList productSymbolList;
+
+    QStringList productIndexList;
 
     QList<MEX_Product> productList;
 
