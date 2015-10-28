@@ -30,7 +30,7 @@ public:
 
 
     void modify(int value, int quantity);
-    void deleteOrder();
+    //void deleteOrder();
 
 private:
 

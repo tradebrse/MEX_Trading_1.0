@@ -11,6 +11,7 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     using namespace std;
 
     ui->setupUi(this);
+    this->showMaximized();
     this->setFixedSize(this->size()); //Set fixed window size
     ui->radioButtonBid->setChecked(true);
     ui->radioButtonAll->setChecked(true);
@@ -265,13 +266,13 @@ void MEX_Main::executeOrder()
 
     if (buy)
     {
-        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"BID");
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"ASK");
         addOrder( tmpOrder, askOrderBook, ui->tableWidgetOrderbookAsk, bidOrderBook, ui->tableWidgetOrderbookBid);
         buy = false;
     }
     else if(sell)
     {
-        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"ASK");
+        tmpOrder = new MEX_Order(traderID, orderID, value, quantity, comment, product,"BID");
         addOrder( tmpOrder, bidOrderBook, ui->tableWidgetOrderbookBid, askOrderBook, ui->tableWidgetOrderbookAsk);
         sell = false;
 
@@ -298,7 +299,9 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
         addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getQuantity())));
         addTableWidget->setItem(newRow, 4,new QTableWidgetItem(QString::number(order->getValue())));
         addTableWidget->setItem(newRow, 5,new QTableWidgetItem(order->getComment()));
+        addTableWidget->setItem(newRow, 6,new QTableWidgetItem(order->getTime().toString("hh:mm:ss.zzz")));
     }
+    refreshTable("ALL","ALL");
 }
 
 void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
@@ -312,6 +315,8 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
     addTableWidget->setItem(newRow, 3,new QTableWidgetItem(QString::number(order->getQuantity())));
     addTableWidget->setItem(newRow, 4,new QTableWidgetItem(QString::number(order->getValue())));
     addTableWidget->setItem(newRow, 5,new QTableWidgetItem(order->getComment()));
+    addTableWidget->setItem(newRow, 6,new QTableWidgetItem(order->getTime().toString("hh:mm:ss.zzz")));
+    refreshTable("ALL","ALL");
 }
 
 bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tableWidget, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
@@ -322,9 +327,9 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
 
     for( i = orderList.begin(); i != orderList.end(); i++)
     {
-        if( (*i)->getProduct() == order->getProduct())
+        if((*i)->getProduct() == order->getProduct())
         {
-            if((order->getOrdertype() == "ASK" && (*i)->getValue() >= order->getValue()) || (order->getOrdertype() == "BID" && (*i)->getValue() <= order->getValue())) //matchedOrders Value beachten...
+            if((order->getOrdertype() == "BID" && (*i)->getValue() >= order->getValue()) || (order->getOrdertype() == "ASK" && (*i)->getValue() <= order->getValue())) //matchedOrders Value beachten...
             {
                 match = true;
                 overValue = true;
@@ -338,10 +343,13 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                     {
                         tableWidget->removeRow(orderList.indexOf((*i)));
                         ordersToDelete.append(orderList.indexOf((*i)));
-                        MEX_Order *tmpOrder = order;
+                        MEX_Order *tmpOrder = new MEX_Order(*order);
                         tmpOrder->setValue((*i)->getValue());
+                        order->setQuantity(0);
                         matchedOrders.append((*i)); //Add to Matched Orders List
+                        qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
                         matchedOrders.append(tmpOrder);//Add to Matched Orders List
+                        qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
                         //Sollte passen
                     }
                     else
@@ -352,6 +360,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                         matchedOrders.append(tmpOrder);//Add part of book order to Matched Orders List
                         tmpOrder = order;
                         tmpOrder->setValue((*i)->getValue());
+                        order->setQuantity(0);
                         matchedOrders.append(tmpOrder); //Add order to Matched Order List
                     }
                     //TODO: Order(s) in Liste "Matched Orders" übergeben
@@ -359,18 +368,24 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
                 else if ( order->getQuantity() > (*i)->getQuantity())
                 {
                     int newQuantity = order->getQuantity() - (*i)->getQuantity();
-                    MEX_Order *tmpOrder = (*i);
+                    qDebug() << "i quant1: " << (*i)->getQuantity();
+                    MEX_Order* tmpOrder = (*i);
                     matchedOrders.append(tmpOrder);//Add book order to Matched Orders List
                     tableWidget->removeRow(orderList.indexOf((*i)));
-                    tmpOrder = order;
-                    tmpOrder->setQuantity((*i)->getQuantity());
-                    tmpOrder->setValue((*i)->getValue());
-                    matchedOrders.append(tmpOrder);//Add part of order to Matched Orders List
+                    MEX_Order* orderCopy = new MEX_Order(*order);
+                    qDebug() << (*i)->getQuantity();
+                    qDebug() << "ordercopy quant1: " << orderCopy->getQuantity();
+                    orderCopy->setQuantity((*i)->getQuantity());
+                    orderCopy->setValue((*i)->getValue());
+                     qDebug() << "ordercopy quant2: " << orderCopy->getQuantity();
+                    matchedOrders.append(orderCopy);//Add part of order to Matched Orders List
+                    qDebug() << matchedOrders.last()->getQuantity();
                     ordersToDelete.append(orderList.indexOf((*i)));
                     order->setQuantity(newQuantity);
+                    qDebug() << matchedOrders.last()->getQuantity();
                     //nach weiteren Orders im Buch suchen
                 }
-
+                qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
             }
         }
     }
@@ -390,6 +405,7 @@ bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTa
 
         addOrder(order, addOrderBook, addTableWidget);
     }
+
     return match;
 }
 
@@ -414,6 +430,7 @@ void MEX_Main::refreshTable(QString products, QString user)
             ui->tableWidgetOrderbookAsk->setItem(newRow, 3,new QTableWidgetItem(QString::number((*i)->getQuantity())));
             ui->tableWidgetOrderbookAsk->setItem(newRow, 4,new QTableWidgetItem(QString::number((*i)->getValue())));
             ui->tableWidgetOrderbookAsk->setItem(newRow, 5,new QTableWidgetItem((*i)->getComment()));
+            ui->tableWidgetOrderbookAsk->setItem(newRow, 6,new QTableWidgetItem((*i)->getTime().toString("hh:mm:ss.zzz")));
         }
     }
 
@@ -431,16 +448,16 @@ void MEX_Main::refreshTable(QString products, QString user)
 
             ui->tableWidgetOrderbookBid->insertRow(newRow);
             ui->tableWidgetOrderbookBid->setItem(newRow, 0,new QTableWidgetItem((*j)->getProduct().getSymbol()));
-                        ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem((*j)->getProduct().getIndex()));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 1,new QTableWidgetItem((*j)->getProduct().getIndex()));
             ui->tableWidgetOrderbookBid->setItem(newRow, 2,new QTableWidgetItem("0"));
             ui->tableWidgetOrderbookBid->setItem(newRow, 3,new QTableWidgetItem(QString::number((*j)->getQuantity())));
             ui->tableWidgetOrderbookBid->setItem(newRow, 4,new QTableWidgetItem(QString::number((*j)->getValue())));
             ui->tableWidgetOrderbookBid->setItem(newRow, 5,new QTableWidgetItem((*j)->getComment()));
+            ui->tableWidgetOrderbookBid->setItem(newRow, 6,new QTableWidgetItem((*j)->getTime().toString("hh:mm:ss.zzz")));
         }
     }
 }
 
-//TODO: tableWidget akutalisieren Methode schrieben --- ??
 
 void MEX_Main::on_btnShow_clicked()
 {
@@ -466,4 +483,20 @@ void MEX_Main::on_btnShow_clicked()
     }
 
     refreshTable(products, user);
+}
+
+void MEX_Main::on_actionTrade_Log_triggered()
+{
+    openTradeLog();
+}
+
+void MEX_Main::openTradeLog(){
+    MEX_TradeLog *tradeLogDialog = new MEX_TradeLog(matchedOrders, this->userID);
+    tradeLogDialog->setAttribute(Qt::WA_DeleteOnClose);
+    connect( tradeLogDialog, SIGNAL(destroyed()), this, SLOT(enableWindow()));
+    //connect( tradeLogDialog, SIGNAL(destroyed()), this, SLOT(loadTrader()));
+    connect( this, SIGNAL(destroyed()), tradeLogDialog, SLOT(close()));
+    tradeLogDialog->show();
+    this->setDisabled(true);
+
 }

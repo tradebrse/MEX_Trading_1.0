@@ -7,6 +7,7 @@
 #include <mex_product.h>
 #include <mex_trader.h>
 #include <mex_order.h>
+#include <mex_tradelog.h>
 #include <QMainWindow>
 #include <QDebug>
 #include <QVarLengthArray>
@@ -74,6 +75,10 @@ private slots:
     void refreshTable(QString, QString);
 
     void on_btnShow_clicked();
+
+    void on_actionTrade_Log_triggered();
+
+    void openTradeLog();
 
 private:
     Ui::MEX_Main *ui;

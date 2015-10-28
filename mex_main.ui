@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1194</width>
-    <height>786</height>
+    <width>1513</width>
+    <height>941</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>530</y>
+      <y>690</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>510</y>
+      <y>670</y>
       <width>51</width>
       <height>61</height>
      </rect>
@@ -85,7 +85,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>510</y>
+      <y>670</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -98,7 +98,7 @@
     <property name="geometry">
      <rect>
       <x>390</x>
-      <y>530</y>
+      <y>690</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -108,7 +108,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>510</y>
+      <y>670</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -121,7 +121,7 @@
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>530</y>
+      <y>690</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -134,7 +134,7 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>560</y>
+      <y>720</y>
       <width>731</width>
       <height>71</height>
      </rect>
@@ -166,7 +166,7 @@
      <rect>
       <x>0</x>
       <y>150</y>
-      <width>591</width>
+      <width>711</width>
       <height>351</height>
      </rect>
     </property>
@@ -205,12 +205,17 @@
       <string>Comment</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Time</string>
+     </property>
+    </column>
    </widget>
    <widget class="QComboBox" name="cBoxProductExec">
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>530</y>
+      <y>690</y>
       <width>111</width>
       <height>22</height>
      </rect>
@@ -233,7 +238,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>510</y>
+      <y>670</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -311,7 +316,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>530</y>
+      <y>690</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -321,7 +326,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>510</y>
+      <y>670</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -333,9 +338,9 @@
    <widget class="QTableWidget" name="tableWidgetOrderbookAsk">
     <property name="geometry">
      <rect>
-      <x>590</x>
+      <x>710</x>
       <y>150</y>
-      <width>601</width>
+      <width>711</width>
       <height>351</height>
      </rect>
     </property>
@@ -369,6 +374,11 @@
       <string>Comment</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Time</string>
+     </property>
+    </column>
    </widget>
    <widget class="QCheckBox" name="checkBoxAllProducts">
     <property name="geometry">
@@ -389,7 +399,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1194</width>
+     <width>1513</width>
      <height>21</height>
     </rect>
    </property>
@@ -399,6 +409,7 @@
     </property>
     <addaction name="actionUser_Panel"/>
     <addaction name="actionMy_Account"/>
+    <addaction name="actionTrade_Log"/>
    </widget>
    <addaction name="menuUser_Panel"/>
   </widget>
@@ -411,6 +422,11 @@
   <action name="actionMy_Account">
    <property name="text">
     <string>My Account</string>
+   </property>
+  </action>
+  <action name="actionTrade_Log">
+   <property name="text">
+    <string>Trade Log</string>
    </property>
   </action>
  </widget>
