@@ -322,90 +322,73 @@ void MEX_Main::addOrder(MEX_Order* order, QList<MEX_Order*> &addOrderBook, QTabl
 bool MEX_Main::checkForMatch(MEX_Order* order, QList<MEX_Order*> &orderList, QTableWidget* &tableWidget, QList<MEX_Order*> &addOrderBook, QTableWidget* &addTableWidget)
 {
     bool match = false;
-    bool overValue = false;
     QList<MEX_Order*>::iterator i;
 
-    for( i = orderList.begin(); i != orderList.end(); i++)
+    for( i = orderList.begin(); i != orderList.end() && order->getQuantity() != 0; i++)
     {
         if((*i)->getProduct() == order->getProduct())
         {
             if((order->getOrdertype() == "BID" && (*i)->getValue() >= order->getValue()) || (order->getOrdertype() == "ASK" && (*i)->getValue() <= order->getValue())) //matchedOrders Value beachten...
             {
                 match = true;
-                overValue = true;
-                ui->lblInfoOutput->setText("Order matched.");
 
+                ui->lblInfoOutput->setText("Order matched.");
                 if((*i)->getQuantity() >= order->getQuantity())
                 {
                     int newQuantity = (*i)->getQuantity() - order->getQuantity();
-
                     if (newQuantity == 0)
                     {
-                        tableWidget->removeRow(orderList.indexOf((*i)));
                         ordersToDelete.append(orderList.indexOf((*i)));
                         MEX_Order *tmpOrder = new MEX_Order(*order);
                         tmpOrder->setValue((*i)->getValue());
                         order->setQuantity(0);
                         matchedOrders.append((*i)); //Add to Matched Orders List
-                        qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
                         matchedOrders.append(tmpOrder);//Add to Matched Orders List
-                        qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
-                        //Sollte passen
                     }
                     else
                     {
-                        (*i)->setQuantity(newQuantity);
                         MEX_Order *tmpOrder = (*i);
-                        tmpOrder->setQuantity(order->getQuantity());
-                        matchedOrders.append(tmpOrder);//Add part of book order to Matched Orders List
-                        tmpOrder = order;
-                        tmpOrder->setValue((*i)->getValue());
+                        MEX_Order *tmpOrder2 = new MEX_Order(*tmpOrder);
+                        tmpOrder2->setQuantity(order->getQuantity());
+                        matchedOrders.append(tmpOrder2);//Add part of book order to Matched Orders List
+                        MEX_Order *orderCopy = new MEX_Order(*order);;
+                        orderCopy->setValue((*i)->getValue());
+                        matchedOrders.append(orderCopy); //Add order to Matched Order List
                         order->setQuantity(0);
-                        matchedOrders.append(tmpOrder); //Add order to Matched Order List
+                        (*i)->setQuantity(newQuantity);
                     }
-                    //TODO: Order(s) in Liste "Matched Orders" übergeben
                 }
                 else if ( order->getQuantity() > (*i)->getQuantity())
                 {
                     int newQuantity = order->getQuantity() - (*i)->getQuantity();
-                    qDebug() << "i quant1: " << (*i)->getQuantity();
                     MEX_Order* tmpOrder = (*i);
                     matchedOrders.append(tmpOrder);//Add book order to Matched Orders List
-                    tableWidget->removeRow(orderList.indexOf((*i)));
                     MEX_Order* orderCopy = new MEX_Order(*order);
-                    qDebug() << (*i)->getQuantity();
-                    qDebug() << "ordercopy quant1: " << orderCopy->getQuantity();
                     orderCopy->setQuantity((*i)->getQuantity());
                     orderCopy->setValue((*i)->getValue());
-                     qDebug() << "ordercopy quant2: " << orderCopy->getQuantity();
                     matchedOrders.append(orderCopy);//Add part of order to Matched Orders List
-                    qDebug() << matchedOrders.last()->getQuantity();
                     ordersToDelete.append(orderList.indexOf((*i)));
                     order->setQuantity(newQuantity);
-                    qDebug() << matchedOrders.last()->getQuantity();
                     //nach weiteren Orders im Buch suchen
                 }
-                qDebug() << matchedOrders.last()->getQuantity() << matchedOrders.last()->getComment() ;
             }
         }
     }
-    if (match == true)
+    if (match == true && ordersToDelete.length() > 0)
     {
         //delete orders from list
-        for(int i = 0; i < ordersToDelete.length(); i++)
+        for(int i = ordersToDelete.length(); i >= 0; i--)
         {
             orderList.removeAt(ordersToDelete.value(i));
+            tableWidget->removeRow(i);
         }
         ordersToDelete.clear();
     }
 
     if (match == true && order->getQuantity() > 0)
     {
-
-
         addOrder(order, addOrderBook, addTableWidget);
     }
-
     return match;
 }
 
