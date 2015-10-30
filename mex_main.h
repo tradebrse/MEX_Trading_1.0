@@ -80,6 +80,10 @@ private slots:
 
     void openTradeLog();
 
+    void sortAskTable(int index);
+
+    void sortBidTable(int index);
+
 private:
     Ui::MEX_Main *ui;
 

@@ -17,6 +17,8 @@ MEX_Main::MEX_Main(QString userID, QWidget *parent) :
     ui->radioButtonAll->setChecked(true);
     ui->checkBoxAllProducts->setChecked(true);
     connect(ui->checkBoxAllProducts, SIGNAL(clicked(bool)), ui->cBoxProductShow, SLOT(setDisabled(bool)));
+    connect(ui->tableWidgetOrderbookAsk->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortAskTable(int)));
+    connect(ui->tableWidgetOrderbookBid->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortBidTable(int)));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
     setUserID(userID);
@@ -400,6 +402,7 @@ void MEX_Main::refreshTable(QString products, QString user)
     }
     QList<MEX_Order*>::iterator i;
 
+
     for(i = askOrderBook.begin(); i != askOrderBook.end(); i++)
     {
         if((products == "ALL" || products == (*i)->getProduct().getName()) && (user == "ALL" || user == (*i)->getTraderID()))
@@ -483,3 +486,108 @@ void MEX_Main::openTradeLog(){
     this->setDisabled(true);
 
 }
+
+static bool sortByIndex( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getProduct().getIndex() < order2->getProduct().getIndex();
+}
+
+static bool sortBySymbol( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getProduct().getSymbol() < order2->getProduct().getSymbol();
+}
+
+static bool sortByAvgPrice( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getValue() < order2->getValue();
+}
+
+static bool sortByQuantity( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getQuantity() < order2->getQuantity();
+}
+
+static bool sortByValue( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getValue() < order2->getValue();
+}
+
+static bool sortByComment( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getComment() < order2->getComment();
+}
+
+static bool sortByTime( MEX_Order* order1,MEX_Order* order2)
+{
+    return order1->getTime() < order2->getTime();
+}
+
+
+void MEX_Main::sortAskTable(int index){
+    switch ( index )
+    {
+    case 0:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortBySymbol);
+        refreshTable("ALL","ALL");
+        break;
+    case 1:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByIndex);
+        refreshTable("ALL","ALL");
+        break;
+    case 2:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByAvgPrice);
+        refreshTable("ALL","ALL");
+        break;
+    case 3:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByQuantity);
+        refreshTable("ALL","ALL");
+        break;
+    case 4:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByValue);
+        refreshTable("ALL","ALL");
+        break;
+    case 5:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByComment);
+        refreshTable("ALL","ALL");
+        break;
+    case 6:
+        qSort(askOrderBook.begin(),askOrderBook.end(),sortByTime);
+        refreshTable("ALL","ALL");
+        break;
+    }
+}
+
+void MEX_Main::sortBidTable(int index){
+    switch ( index )
+    {
+    case 0:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortBySymbol);
+        refreshTable("ALL","ALL");
+        break;
+    case 1:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByIndex);
+        refreshTable("ALL","ALL");
+        break;
+    case 2:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByAvgPrice);
+        refreshTable("ALL","ALL");
+        break;
+    case 3:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByQuantity);
+        refreshTable("ALL","ALL");
+        break;
+    case 4:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByValue);
+        refreshTable("ALL","ALL");
+        break;
+    case 5:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByComment);
+        refreshTable("ALL","ALL");
+        break;
+    case 6:
+        qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByTime);
+        refreshTable("ALL","ALL");
+        break;
+    }
+}
+
