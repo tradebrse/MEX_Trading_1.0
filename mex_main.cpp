@@ -487,6 +487,20 @@ void MEX_Main::openTradeLog(){
 
 }
 
+///WEITERARBEITEN...
+/*void sortPriceTime(Qlist<MEX_Order*> unsortedList)
+{
+    qSort(unsortedList.begin(),unsortedList.end(),sortByValue);
+  //qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByValue);
+    QList<MEX_Order*>::iterator i;
+    for( i = unsortedList.begin(); i != unsortedList.end(); i++)
+    {
+        if((*i)->getValue() == ) //Alle mit gleichen Werten müssen erfasst werden und dann nach time sortiert werden
+    }
+
+}
+*/
+
 static bool sortByIndex( MEX_Order* order1,MEX_Order* order2)
 {
     return order1->getProduct().getIndex() < order2->getProduct().getIndex();
@@ -528,31 +542,31 @@ void MEX_Main::sortAskTable(int index){
     {
     case 0:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortBySymbol);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 1:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByIndex);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 2:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByAvgPrice);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 3:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByQuantity);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 4:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByValue);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 5:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByComment);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 6:
         qSort(askOrderBook.begin(),askOrderBook.end(),sortByTime);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     }
 }
@@ -562,31 +576,31 @@ void MEX_Main::sortBidTable(int index){
     {
     case 0:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortBySymbol);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 1:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByIndex);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 2:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByAvgPrice);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 3:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByQuantity);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 4:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByValue);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 5:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByComment);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     case 6:
         qSort(bidOrderBook.begin(),bidOrderBook.end(),sortByTime);
-        refreshTable("ALL","ALL");
+        on_btnShow_clicked();
         break;
     }
 }

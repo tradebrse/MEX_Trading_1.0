@@ -80,8 +80,6 @@ void MEX_Login::logInUser()
                 {
                     ui->lblLogInOutput->setText("Successsfully logged in as admin!");
                     openMainWindow(userID);
-                    ui->edtLogInPW->setEnabled(false);
-                    ui->edtLogInUser->setEnabled(false);
                 }
 
             } else
@@ -202,10 +200,12 @@ QString MEX_Login::encrypt(QString clearPass)
 
 void MEX_Login::openMainWindow(QString userID)
 {
-    closeDB();
+    //closeDB();
     MEX_Main *mainWindow = new MEX_Main(userID);
     mainWindow->show();
-    this->hide();
+    //ui->edtLogInPW->setEnabled(false);
+    //ui->edtLogInUser->setEnabled(false);
+    //this->hide();
 
 }
 
