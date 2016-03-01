@@ -1,1 +1,1 @@
-[INACTIVE]# trading
+[INACTIVE] trading
